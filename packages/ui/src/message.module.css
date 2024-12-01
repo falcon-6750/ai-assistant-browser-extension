@@ -11,3 +11,7 @@
   margin: 0;
   text-transform: capitalize;
 }
+
+.messageAvatar {
+  flex-shrink: 0;
+}

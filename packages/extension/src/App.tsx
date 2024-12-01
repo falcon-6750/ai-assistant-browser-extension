@@ -6,6 +6,7 @@ import { PaperAirplane } from "@repo/icons/paper-airplane";
 import { Button } from "@repo/ui/button";
 import { ComboBox } from "@repo/ui/combo-box";
 import { Message } from "@repo/ui/message";
+import { AIAgent } from ".";
 
 const initialPrompts = [
   {
@@ -20,7 +21,7 @@ const initialPrompts = [
   },
 ];
 
-export function App() {
+export function App({ aiAgent }: { aiAgent: AIAgent }) {
   const [messages, setMessages] = useState<
     {
       author: "me" | "Falcon AI";
@@ -57,13 +58,14 @@ export function App() {
       setIsLoading(true);
       setMessages(nextMessages);
 
-      setTimeout(() => {
+      setTimeout(async () => {
         setIsLoading(false);
+        const response = await aiAgent.prompt(message);
         setMessages([
           ...nextMessages,
           {
             author: "Falcon AI",
-            body: "This is a test response",
+            body: response,
             id: crypto.randomUUID(),
             initials: "AI",
           },
@@ -72,7 +74,7 @@ export function App() {
 
       event.currentTarget.reset();
     },
-    [messages, setMessages]
+    [aiAgent, messages, setMessages]
   );
 
   return (
@@ -85,11 +87,10 @@ export function App() {
               <li key={message.id}>
                 <Message
                   author={message.author}
+                  body={message.body}
                   initials={message.initials}
                   isBordered={message.author === "me"}
-                >
-                  {message.body}
-                </Message>
+                />
               </li>
             ))}
           </ul>

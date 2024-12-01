@@ -7,12 +7,13 @@ import styles from "./message.module.css";
 
 export interface MessageProps extends React.HTMLAttributes<HTMLDivElement> {
   author: string;
+  body: string;
   initials: string;
   isBordered?: boolean;
 }
 
 export function Message({
-  children,
+  body,
   className,
   author,
   initials,
@@ -21,10 +22,13 @@ export function Message({
   return (
     <Card className={clsx(className)} {...rest}>
       <div className={styles.message}>
-        <Avatar initials={initials} />
+        <Avatar className={styles.messageAvatar} initials={initials} />
         <div className={styles.messageContent}>
           <p className={styles.messageAuthor}>{author}</p>
-          <div className={styles.messageText}>{children}</div>
+          <div
+            className={styles.messageText}
+            dangerouslySetInnerHTML={{ __html: body }}
+          />
         </div>
       </div>
     </Card>

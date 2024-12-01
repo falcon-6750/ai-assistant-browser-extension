@@ -12,6 +12,8 @@
 
 .main {
   flex-grow: 1;
+  overflow-y: auto;
+  padding: 1rem 0.75rem;
 }
 
 .footer {
@@ -32,4 +34,18 @@
 
 .comboBox {
   flex-grow: 1;
+}
+
+.messages {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  > li {
+    margin-bottom: 1.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
 }

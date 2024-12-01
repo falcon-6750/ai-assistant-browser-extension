@@ -1,10 +1,11 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import styles from "./App.module.css";
 
 import { PaperAirplane } from "@repo/icons/paper-airplane";
 import { Button } from "@repo/ui/button";
 import { ComboBox } from "@repo/ui/combo-box";
+import { Message } from "@repo/ui/message";
 
 const initialPrompts = [
   {
@@ -24,26 +25,52 @@ export function App() {
     {
       author: "me" | "Falcon AI";
       id: string;
-      message: string;
+      initials: "ME" | "AI";
+      body: string;
     }[]
   >([]);
+
+  const mainRef = useRef<HTMLDivElement | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    mainRef.current?.scrollTo({ top: mainRef.current.scrollHeight });
+  }, [messages]);
 
   const handleSubmit = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
 
       const formData = new FormData(event.currentTarget);
-      console.log(formData);
-      const message = formData.get("message") as string;
+      const message = ((formData.get("message") as string) ?? "").trim();
+      if (!message) return;
 
-      setMessages([
+      const nextMessages = [
         ...messages,
         {
-          author: "me",
+          author: "me" as const,
+          body: message,
           id: crypto.randomUUID(),
-          message,
+          initials: "ME" as const,
         },
-      ]);
+      ];
+      setIsLoading(true);
+      setMessages(nextMessages);
+
+      setTimeout(() => {
+        setIsLoading(false);
+        setMessages([
+          ...nextMessages,
+          {
+            author: "Falcon AI",
+            body: "This is a test response",
+            id: crypto.randomUUID(),
+            initials: "AI",
+          },
+        ]);
+      }, 3000);
+
+      event.currentTarget.reset();
     },
     [messages, setMessages]
   );
@@ -51,11 +78,19 @@ export function App() {
   return (
     <article className={styles.app}>
       <header className={styles.header}>settings</header>
-      <main className={styles.main}>
+      <main className={styles.main} ref={mainRef}>
         {messages.length > 0 && (
-          <ul>
+          <ul className={styles.messages}>
             {messages.map((message) => (
-              <li key={message.id}>{message.message}</li>
+              <li key={message.id}>
+                <Message
+                  author={message.author}
+                  initials={message.initials}
+                  isBordered={message.author === "me"}
+                >
+                  {message.body}
+                </Message>
+              </li>
             ))}
           </ul>
         )}
@@ -69,7 +104,13 @@ export function App() {
             label="Message"
             placeholder="Ask anything about this page..."
           />
-          <Button aria-label="Send" type="submit" isIcon isInlineSubmit>
+          <Button
+            aria-label="Send"
+            type="submit"
+            isIcon
+            isInlineSubmit
+            isDisabled={isLoading}
+          >
             <PaperAirplane className={styles.buttonIcon} />
           </Button>
         </form>

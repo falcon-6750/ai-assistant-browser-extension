@@ -1,0 +1,13 @@
+.message {
+  align-items: flex-start;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-start;
+}
+
+.messageAuthor {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0;
+  text-transform: capitalize;
+}

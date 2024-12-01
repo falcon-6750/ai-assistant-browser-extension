@@ -4,8 +4,11 @@
   "type": "module",
   "private": true,
   "exports": {
+    "./avatar": "./src/avatar.tsx",
     "./button": "./src/button.tsx",
-    "./combo-box": "./src/combo-box.tsx"
+    "./card": "./src/card.tsx",
+    "./combo-box": "./src/combo-box.tsx",
+    "./message": "./src/message.tsx"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",

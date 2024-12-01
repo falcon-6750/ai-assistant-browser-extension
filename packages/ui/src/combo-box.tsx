@@ -29,7 +29,7 @@ export function ComboBox({
   placeholder,
 }: ComboBoxProps) {
   return (
-    <RACComboBox aria-label={label} className={className}>
+    <RACComboBox allowsCustomValue aria-label={label} className={className}>
       <div className={styles.inputContainer}>
         <Input className={styles.input} name={name} placeholder={placeholder} />
         <Button aria-label="Toggle suggestions" className={styles.button}>

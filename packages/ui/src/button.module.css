@@ -1,12 +1,12 @@
 :root {
-  --falcon-ui-button-background-color: red;
-  --falcon-ui-button-background-color-hover: blue;
+  --ui-button-background-color: red;
+  --ui-button-background-color-hover: blue;
 }
 
 .button {
-  background-color: var(--falcon-ui-button-background-color);
+  background-color: var(--ui-button-background-color);
 
   &:hover {
-    background-color: var(--falcon-ui-button-background-color-hover);
+    --ui-button-background-color: var(--ui-button-background-color-hover);
   }
 }

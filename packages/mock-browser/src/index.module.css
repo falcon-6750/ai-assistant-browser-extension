@@ -2,6 +2,8 @@
   background-color: #fff;
   border-radius: 0.75rem;
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
   height: 100%;
   overflow: hidden;
   width: 100%;
@@ -9,8 +11,10 @@
 
 .toolbar {
   background-color: #e3e2e6;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.025);
   height: 5.5rem;
   width: 100%;
+  z-index: 10;
 }
 
 .tabRegion {
@@ -105,7 +109,7 @@
 
 .extensionButton {
   background-color: #727379;
-  border-radius: 3px;
+  border-radius: 50%;
   color: #edf0fe;
   transition: all 0.5s ease-in-out;
 
@@ -113,4 +117,36 @@
     background-color: #202021;
     color: white;
   }
+}
+
+.main {
+  flex-grow: 1;
+  position: relative;
+  width: 100%;
+}
+
+.content {
+  border: none;
+  flex-grow: 1;
+  height: 100%;
+  margin-top: 9px;
+  transition: width 0.1s ease-in-out;
+  width: 100%;
+}
+
+.isContentOpen {
+  width: calc(100% - 360px);
+}
+
+.extension {
+  position: absolute;
+  bottom: 0;
+  top: 9px;
+  right: -360px;
+  transition: right 0.1s ease-in-out;
+  width: 360px;
+}
+
+.isExtensionOpen {
+  right: 0;
 }

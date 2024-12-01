@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import styles from "./index.module.css";
 
 import { ArrowDownTray } from "./icons/ArrowDownTray";
@@ -23,7 +25,17 @@ function notImplemented(
   alert("Not implemented!");
 }
 
-export function MockBrowser({ extensionName = "Falcon AI Extension" }) {
+export function MockBrowser({
+  extensionName = "Falcon AI",
+  websiteName = "Cognitive Load | Wikipedia",
+  websiteUrl = "https://en.wikipedia.org/wiki/Cognitive_load",
+}: {
+  extensionName?: string;
+  websiteName?: string;
+  websiteUrl?: string;
+}) {
+  const [isExtensionOpen, setIsExtensionOpen] = useState(false);
+
   return (
     <div className={styles.window}>
       <div className={styles.toolbar}>
@@ -31,7 +43,7 @@ export function MockBrowser({ extensionName = "Falcon AI Extension" }) {
           <div className={styles.tabGroup}>
             <div className={styles.tab}>
               <Globe className={styles.icon} />
-              GA Tech
+              {websiteName}
             </div>
           </div>
         </div>
@@ -62,15 +74,13 @@ export function MockBrowser({ extensionName = "Falcon AI Extension" }) {
               <Refresh className={styles.icon} />
             </button>
           </div>
-          <input
-            className={styles.locationBar}
-            value="https://www.gatech.edu"
-          />
+          <input className={styles.locationBar} value={websiteUrl} />
           <div className={styles.iconGroup}>
             <button
               className={`${styles.iconButton} ${styles.extensionButton}`}
-              aria-label={`Open ${extensionName}`}
-              title={`Open ${extensionName}`}
+              onClick={() => setIsExtensionOpen(!isExtensionOpen)}
+              aria-label={`Open ${extensionName} extension`}
+              title={`Open ${extensionName} extension`}
             >
               <Sparkle className={styles.icon} />
             </button>
@@ -91,6 +101,17 @@ export function MockBrowser({ extensionName = "Falcon AI Extension" }) {
               <EllipsisVertical className={styles.icon} />
             </button>
           </div>
+        </div>
+      </div>
+      <div className={styles.main}>
+        <iframe
+          className={`${styles.content} ${isExtensionOpen ? styles.isContentOpen : ""}`}
+          src={websiteUrl}
+        />
+        <div
+          className={`${styles.extension} ${isExtensionOpen ? styles.isExtensionOpen : ""}`}
+        >
+          Extension Here
         </div>
       </div>
     </div>

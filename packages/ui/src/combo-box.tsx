@@ -17,6 +17,7 @@ export interface ComboBoxProps extends React.HTMLAttributes<HTMLDivElement> {
     value: string;
   }[];
   label: string;
+  name: string;
   placeholder?: string;
 }
 
@@ -24,21 +25,22 @@ export function ComboBox({
   className,
   items,
   label,
+  name,
   placeholder,
 }: ComboBoxProps) {
   return (
-    <RACComboBox className={className}>
+    <RACComboBox aria-label={label} className={className}>
       <div className={styles.inputContainer}>
-        <Input
-          aria-label={label}
-          className={styles.input}
-          placeholder={placeholder}
-        />
-        <Button className={styles.button}>
+        <Input className={styles.input} name={name} placeholder={placeholder} />
+        <Button aria-label="Toggle suggestions" className={styles.button}>
           <ChevronUp className={styles.buttonIcon} />
         </Button>
       </div>
-      <Popover className={styles.popover} placement="top left">
+      <Popover
+        aria-label="Suggestions"
+        className={styles.popover}
+        placement="top left"
+      >
         <ListBox className={styles.listBox}>
           {items.map((item) => (
             <ListBoxItem className={styles.listBoxItem} key={item.id}>

@@ -76,7 +76,12 @@ export function MockBrowser({
               <Refresh className={styles.icon} />
             </button>
           </div>
-          <input className={styles.locationBar} value={websiteUrl} />
+          <input
+            aria-label="Website URL"
+            className={styles.locationBar}
+            value={websiteUrl}
+            readOnly
+          />
           <div className={styles.iconGroup}>
             <button
               className={`${styles.iconButton} ${styles.extensionButton}`}

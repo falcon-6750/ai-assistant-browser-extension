@@ -35,7 +35,21 @@ export function App({ aiAgent }: { aiAgent: AIAgent }) {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    mainRef.current?.scrollTo({ top: mainRef.current.scrollHeight });
+    if (!mainRef.current) {
+      return;
+    }
+
+    const nodes = mainRef.current.querySelectorAll("#messages-list > li");
+    if (!nodes.length) {
+      return;
+    }
+
+    const lastNode = nodes[nodes.length - 1];
+    lastNode?.scrollIntoView({
+      block: "nearest",
+      inline: "nearest",
+      behavior: "smooth",
+    });
   }, [messages]);
 
   const handleSubmit = useCallback(
@@ -81,7 +95,7 @@ export function App({ aiAgent }: { aiAgent: AIAgent }) {
     <article className={styles.app}>
       <main className={styles.main} ref={mainRef}>
         {messages.length > 0 && (
-          <ul className={styles.messages}>
+          <ul id="messages-list" className={styles.messages}>
             {messages.map((message) => (
               <li key={message.id}>
                 <Message

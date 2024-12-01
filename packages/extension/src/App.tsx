@@ -79,7 +79,6 @@ export function App({ aiAgent }: { aiAgent: AIAgent }) {
 
   return (
     <article className={styles.app}>
-      <header className={styles.header}>settings</header>
       <main className={styles.main} ref={mainRef}>
         {messages.length > 0 && (
           <ul className={styles.messages}>

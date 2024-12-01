@@ -25,21 +25,23 @@ function notImplemented(
   alert("Not implemented!");
 }
 
+interface MockBrowserProps extends React.HTMLAttributes<HTMLDivElement> {
+  extensionName: string;
+  websiteName: string;
+  websiteUrl: string;
+}
+
 export function MockBrowser({
   children,
   extensionName,
   websiteName,
   websiteUrl,
-}: {
-  children: React.ReactNode;
-  extensionName: string;
-  websiteName: string;
-  websiteUrl: string;
-}) {
+  ...rest
+}: MockBrowserProps) {
   const [isExtensionOpen, setIsExtensionOpen] = useState(false);
 
   return (
-    <div className={styles.window}>
+    <div className={styles.window} {...rest}>
       <div className={styles.toolbar}>
         <div className={styles.tabRegion}>
           <div className={styles.tabGroup}>

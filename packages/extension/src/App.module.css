@@ -49,3 +49,23 @@
     }
   }
 }
+
+.blankSlate {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  text-align: center;
+}
+
+.blankSlateTitle {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.blankSlateDescription {
+  font-size: 1rem;
+  font-weight: 400;
+  margin: 0;
+}

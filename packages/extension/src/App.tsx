@@ -7,6 +7,7 @@ import { Button } from "@repo/ui/button";
 import { ComboBox } from "@repo/ui/combo-box";
 import { Message } from "@repo/ui/message";
 import { AIAgent } from ".";
+import { BlankSlate } from "./BlankSlate";
 
 const initialPrompts = [
   {
@@ -21,7 +22,13 @@ const initialPrompts = [
   },
 ];
 
-export function App({ aiAgent }: { aiAgent: AIAgent }) {
+export function App({
+  aiAgent,
+  getSelection,
+}: {
+  aiAgent: AIAgent;
+  getSelection: () => Promise<string>;
+}) {
   const [messages, setMessages] = useState<
     {
       author: "me" | "Falcon AI";
@@ -53,12 +60,19 @@ export function App({ aiAgent }: { aiAgent: AIAgent }) {
   }, [messages]);
 
   const handleSubmit = useCallback(
-    (event: React.FormEvent<HTMLFormElement>) => {
+    async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
 
       const formData = new FormData(event.currentTarget);
-      const message = ((formData.get("message") as string) ?? "").trim();
+      let message = ((formData.get("message") as string) ?? "").trim();
       if (!message) return;
+
+      event.currentTarget.reset();
+
+      const selection = await getSelection();
+      if (selection) {
+        message = `${message}\n\nUsing this selection:\n\n ${selection}`;
+      }
 
       const nextMessages = [
         ...messages,
@@ -84,9 +98,7 @@ export function App({ aiAgent }: { aiAgent: AIAgent }) {
             initials: "AI",
           },
         ]);
-      }, 3000);
-
-      event.currentTarget.reset();
+      }, 2000);
     },
     [aiAgent, messages, setMessages]
   );
@@ -107,6 +119,17 @@ export function App({ aiAgent }: { aiAgent: AIAgent }) {
               </li>
             ))}
           </ul>
+        )}
+        {messages.length === 0 && (
+          <div className={styles.blankSlate}>
+            <div>
+              <BlankSlate />
+              <h2 className={styles.blankSlateTitle}>Welcome human!</h2>
+              <p className={styles.blankSlateDescription}>
+                Ask anything, I'm bored.
+              </p>
+            </div>
+          </div>
         )}
       </main>
       <footer className={styles.footer}>

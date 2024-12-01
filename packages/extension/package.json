@@ -1,11 +1,10 @@
 {
-  "name": "@repo/ui",
+  "name": "@repo/extension",
   "version": "0.0.0",
   "type": "module",
   "private": true,
   "exports": {
-    "./button": "./src/button.tsx",
-    "./combo-box": "./src/combo-box.tsx"
+    ".": "./src/index.tsx"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
@@ -13,18 +12,13 @@
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
-    "@repo/icons": "*",
     "@repo/typescript-config": "*",
-    "@turbo/gen": "^1.12.4",
     "@types/node": "^20.11.24",
     "@types/react": "18.3.0",
     "@types/react-dom": "18.3.1",
     "typescript": "5.5.4"
   },
   "dependencies": {
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "react-aria": "^3.36.0",
-    "react-aria-components": "^1.5.0"
+    "@repo/ui": "*"
   }
 }

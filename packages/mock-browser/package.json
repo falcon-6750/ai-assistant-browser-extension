@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
+    "@repo/icons": "*",
     "@repo/typescript-config": "*",
     "@types/node": "^20.11.24",
     "@types/react": "18.3.0",

@@ -2,13 +2,13 @@ import { useState } from "react";
 
 import styles from "./index.module.css";
 
-import { ArrowDownTray } from "./icons/ArrowDownTray";
-import { ArrowLeft } from "./icons/ArrowLeft";
-import { ArrowRight } from "./icons/ArrowRight";
-import { EllipsisVertical } from "./icons/EllipsisVertical";
-import { Globe } from "./icons/Globe";
-import { Refresh } from "./icons/Refresh";
-import { Sparkle } from "./icons/Sparkle";
+import { ArrowDownTray } from "@repo/icons/arrow-down-tray";
+import { ArrowLeft } from "@repo/icons/arrow-left";
+import { ArrowRight } from "@repo/icons/arrow-right";
+import { EllipsisVertical } from "@repo/icons/ellipsis-vertical";
+import { Globe } from "@repo/icons/globe";
+import { Refresh } from "@repo/icons/refresh";
+import { Sparkle } from "@repo/icons/sparkle";
 
 enum Label {
   Back = "Click to go back, hold to see history",
@@ -26,13 +26,15 @@ function notImplemented(
 }
 
 export function MockBrowser({
-  extensionName = "Falcon AI",
-  websiteName = "Cognitive Load | Wikipedia",
-  websiteUrl = "https://en.wikipedia.org/wiki/Cognitive_load",
+  children,
+  extensionName,
+  websiteName,
+  websiteUrl,
 }: {
-  extensionName?: string;
-  websiteName?: string;
-  websiteUrl?: string;
+  children: React.ReactNode;
+  extensionName: string;
+  websiteName: string;
+  websiteUrl: string;
 }) {
   const [isExtensionOpen, setIsExtensionOpen] = useState(false);
 
@@ -111,7 +113,7 @@ export function MockBrowser({
         <div
           className={`${styles.extension} ${isExtensionOpen ? styles.isExtensionOpen : ""}`}
         >
-          Extension Here
+          {children}
         </div>
       </div>
     </div>

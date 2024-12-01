@@ -1,0 +1,35 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+}
+
+.header {
+  padding: 1rem;
+}
+
+.main {
+  flex-grow: 1;
+}
+
+.footer {
+  background-color: #faf8fa;
+  border-top: 1px solid #e3e2e6;
+  padding: 1rem 0.75rem;
+}
+
+.form {
+  display: flex;
+  width: 100%;
+}
+
+.buttonIcon {
+  height: 1rem;
+  width: 1rem;
+}
+
+.comboBox {
+  flex-grow: 1;
+}

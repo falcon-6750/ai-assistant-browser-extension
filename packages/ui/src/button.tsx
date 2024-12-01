@@ -6,8 +6,21 @@ import {
 
 import styles from "./button.module.css";
 
-export function Button(props: RACButtonProps) {
+export interface ButtonProps extends RACButtonProps {
+  isIcon?: boolean;
+  isInlineSubmit?: boolean;
+}
+
+export function Button(props: ButtonProps) {
   return (
-    <RACButton {...props} className={clsx(styles.button, props.className)} />
+    <RACButton
+      {...props}
+      className={clsx(
+        styles.button,
+        props.className,
+        props.isIcon && styles.isIcon,
+        props.isInlineSubmit && styles.isInlineSubmit
+      )}
+    />
   );
 }

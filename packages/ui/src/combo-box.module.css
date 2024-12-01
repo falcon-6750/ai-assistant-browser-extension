@@ -1,0 +1,96 @@
+:root {
+  --combo-box-background: #fff;
+  --combo-box-border: #e3e2e6;
+  --combo-box-foreground: #303031;
+  --combo-box-highlight-background: #faf8fa;
+  --combo-box-highlight-foreground: #303031;
+}
+
+.button {
+  background-color: transparent;
+  border: none;
+  height: unset;
+}
+
+.buttonIcon {
+  height: 1rem;
+  width: 1rem;
+}
+
+.inputContainer {
+  background-color: #fff;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border: 1px solid #ccc;
+  border-box: box-sizing;
+  color: #000;
+  display: flex;
+  gap: 0.5rem;
+  position: relative;
+  width: 100%;
+
+  &:focus-within {
+    outline: 1px solid #727378;
+  }
+}
+
+.input {
+  border: none;
+  height: 2rem;
+  flex-grow: 1;
+  padding-left: 0.5rem;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.listBox {
+  display: block;
+  width: unset;
+  max-height: inherit;
+  min-height: unset;
+  border: none;
+
+  .react-aria-Header {
+    padding-left: 1.571rem;
+  }
+}
+
+.listBoxItem {
+  padding: 0.286rem 0.571rem 0.286rem 1.571rem;
+  position: relative;
+
+  &[data-focus-visible] {
+    outline: none;
+  }
+
+  &[data-selected] {
+    font-weight: 600;
+    background: unset;
+
+    &::before {
+      content: "✓";
+      content: "✓" / "";
+      alt: " ";
+      position: absolute;
+      top: 4px;
+      left: 4px;
+    }
+  }
+
+  &[data-focused],
+  &[data-pressed] {
+    background: var(--combo-box-highlight-background);
+    color: var(--combo-box-highlight-foreground);
+  }
+}
+
+.popover[data-trigger="ComboBox"] {
+  background-color: var(--combo-box-background);
+  border: 1px solid var(--combo-box-border);
+  color: var(--combo-box-foreground);
+  padding: 0.25rem;
+  z-index: 100;
+  width: calc(360px - 2rem);
+}

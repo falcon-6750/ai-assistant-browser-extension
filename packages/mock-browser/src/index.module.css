@@ -1,0 +1,116 @@
+.window {
+  background-color: #fff;
+  border-radius: 0.75rem;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.25);
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+}
+
+.toolbar {
+  background-color: #e3e2e6;
+  height: 5.5rem;
+  width: 100%;
+}
+
+.tabRegion {
+  border-top: 1px solid white;
+  height: 2.5rem;
+  width: 100%;
+}
+
+.tabGroup {
+  display: inline-flex;
+  height: 2.5rem;
+  margin-left: 2.5rem;
+  padding-top: 0.25rem;
+}
+
+.tab {
+  align-items: center;
+  background-color: #fbf8fa;
+  border-radius: 0.75rem 0.75rem 0 0;
+  box-shadow: 0 -0.125rem 0.25rem rgba(0, 0, 0, 0.025);
+  color: #202021;
+  display: inline-flex;
+  font-size: 0.875rem;
+  gap: 0.5rem;
+  height: 100%;
+  justify-content: center;
+  padding: 0 2.5rem;
+}
+
+.barRegion {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  background-color: #fbf8fa;
+  border-bottom: 1px solid #e3e2e6;
+  border-radius: 0.75rem 0.75rem 0 0;
+  box-shadow: 0 -0.125rem 0.25rem rgba(0, 0, 0, 0.025);
+  border-top: 1px solid #fff;
+  height: 3.5rem;
+  padding: 0 1.125rem;
+  width: 100%;
+}
+
+.icon {
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
+.iconButton {
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  border-radius: 50%;
+  color: #727379;
+  cursor: pointer;
+  display: flex;
+  height: 2rem;
+  justify-content: center;
+  padding: 0;
+  transition: background-color 0.5s ease-in-out;
+  width: 2rem;
+
+  &:focus-visible {
+    outline: 1px solid #727379;
+  }
+
+  &:hover {
+    background-color: #edf0fe;
+  }
+}
+
+.iconGroup {
+  display: inline-flex;
+  gap: 0.75rem;
+}
+
+.locationBar {
+  background-color: #eae9ed;
+  border: none;
+  border-radius: 2.125rem;
+  color: #202021;
+  flex-grow: 1;
+  height: 2.125rem;
+  padding: 0 1.5rem;
+  margin: 0 0.75rem;
+  width: 100%;
+
+  &:focus-visible {
+    outline: 1px solid #727379;
+  }
+}
+
+.extensionButton {
+  background-color: #727379;
+  border-radius: 3px;
+  color: #edf0fe;
+  transition: all 0.5s ease-in-out;
+
+  &:hover {
+    background-color: #202021;
+    color: white;
+  }
+}

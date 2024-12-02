@@ -140,6 +140,7 @@
 
 .extension {
   position: absolute;
+  border-left: 1px solid #e3e2e6;
   bottom: 0;
   top: 9px;
   right: -360px;

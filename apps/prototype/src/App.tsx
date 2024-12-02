@@ -16,16 +16,18 @@ function App() {
 
   return (
     <div className={styles.app} ref={mockBrowserRef}>
-      <MockBrowser
-        extensionName={EXTENSION_NAME}
-        websiteName="Cognitive Load | Wikipedia"
-        websiteUrl="https://en.wikipedia.org/wiki/Cognitive_load"
-      >
-        <Extension
-          aiAgent={new FakeAIAgent("You are a helpful assistant.")}
-          getSelection={getSelection}
-        />
-      </MockBrowser>
+      <div className={styles.container}>
+        <MockBrowser
+          extensionName={EXTENSION_NAME}
+          websiteName="Cognitive Load | Wikipedia"
+          websiteUrl="https://en.wikipedia.org/wiki/Cognitive_load"
+        >
+          <Extension
+            aiAgent={new FakeAIAgent("You are a helpful assistant.")}
+            getSelection={getSelection}
+          />
+        </MockBrowser>
+      </div>
     </div>
   );
 }

@@ -100,7 +100,7 @@ export function App({
         ]);
       }, 2000);
     },
-    [aiAgent, messages, setMessages]
+    [aiAgent, getSelection, messages, setMessages]
   );
 
   return (

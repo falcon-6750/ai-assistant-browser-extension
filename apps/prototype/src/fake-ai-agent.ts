@@ -70,6 +70,6 @@ export class FakeAIAgent implements AIAgent {
     } else if (input.startsWith("Who developed this")) {
       return "John Sweller developed cognitive load theory.";
     }
-    return "I'm sorry, I'm just a prototype. I don't know how to respond to that.";
+    return "Ask me something different. I'm unable to fetch the answer for this right now.";
   }
 }

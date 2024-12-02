@@ -5,6 +5,7 @@ import styles from "./App.module.css";
 import { PaperAirplane } from "@repo/icons/paper-airplane";
 import { Button } from "@repo/ui/button";
 import { ComboBox } from "@repo/ui/combo-box";
+import { FolderArrowDown } from "@repo/icons/folder-arrow-down";
 import { Message } from "@repo/ui/message";
 import { AIAgent } from ".";
 import { BlankSlate } from "./BlankSlate";
@@ -37,6 +38,7 @@ export function App({
       body: string;
     }[]
   >([]);
+  const [prompts, setPrompts] = useState(initialPrompts);
 
   const mainRef = useRef<HTMLDivElement | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -53,11 +55,32 @@ export function App({
 
     const lastNode = nodes[nodes.length - 1];
     lastNode?.scrollIntoView({
-      block: "nearest",
+      block: "start",
       inline: "nearest",
       behavior: "smooth",
     });
   }, [messages]);
+
+  const hasPrompt = useCallback(
+    (prompt: string) => {
+      return prompts.some((p) => p.value === prompt);
+    },
+    [prompts]
+  );
+
+  const handleSavePrompt = useCallback(
+    (prompt: string) => {
+      if (hasPrompt(prompt)) {
+        return;
+      }
+
+      setPrompts([
+        ...prompts,
+        { id: crypto.randomUUID(), label: prompt, value: prompt },
+      ]);
+    },
+    [prompts, setPrompts]
+  );
 
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
@@ -116,6 +139,20 @@ export function App({
                   initials={message.initials}
                   isBordered={message.author === "me"}
                 />
+                {message.author === "me" && !hasPrompt(message.body) && (
+                  <div className={styles.promptActions}>
+                    <a
+                      className={styles.savePrompt}
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleSavePrompt(message.body);
+                      }}
+                    >
+                      <FolderArrowDown className={styles.savePromptIcon} /> Save
+                    </a>
+                  </div>
+                )}
               </li>
             ))}
           </ul>
@@ -137,7 +174,7 @@ export function App({
           <ComboBox
             className={styles.comboBox}
             name="message"
-            items={initialPrompts}
+            items={prompts}
             label="Message"
             placeholder="Ask anything about this page..."
           />

@@ -9,6 +9,7 @@
     "./arrow-right": "./src/ArrowRight.tsx",
     "./chevron-up": "./src/ChevronUp.tsx",
     "./ellipsis-vertical": "./src/EllipsisVertical.tsx",
+    "./folder-arrow-down": "./src/FolderArrowDown.tsx",
     "./globe": "./src/Globe.tsx",
     "./paper-airplane": "./src/PaperAirplane.tsx",
     "./refresh": "./src/Refresh.tsx",

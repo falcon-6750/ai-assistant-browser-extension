@@ -13,13 +13,18 @@ import { BlankSlate } from "./BlankSlate";
 const initialPrompts = [
   {
     id: crypto.randomUUID(),
-    label: "Summarize this page",
-    value: "Summarize this page",
+    label: "List the topics in this page",
+    value: "List the topics in this page",
   },
   {
     id: crypto.randomUUID(),
     label: "Recommend more content like this",
     value: "Recommend more content like this",
+  },
+  {
+    id: crypto.randomUUID(),
+    label: "Summarize this page",
+    value: "Summarize this page",
   },
 ];
 
@@ -55,7 +60,7 @@ export function App({
 
     const lastNode = nodes[nodes.length - 1];
     lastNode?.scrollIntoView({
-      block: "start",
+      block: "nearest",
       inline: "nearest",
       behavior: "smooth",
     });
@@ -82,6 +87,37 @@ export function App({
     [prompts, setPrompts]
   );
 
+  const handlePrompt = useCallback(
+    (prompt: string) => {
+      const nextMessages = [
+        ...messages,
+        {
+          author: "me" as const,
+          body: prompt,
+          id: crypto.randomUUID(),
+          initials: "ME" as const,
+        },
+      ];
+      setIsLoading(true);
+      setMessages(nextMessages);
+
+      setTimeout(async () => {
+        setIsLoading(false);
+        const response = await aiAgent.prompt(prompt);
+        setMessages([
+          ...nextMessages,
+          {
+            author: "Falcon AI",
+            body: response,
+            id: crypto.randomUUID(),
+            initials: "AI",
+          },
+        ]);
+      }, 2000);
+    },
+    [aiAgent, messages, setMessages]
+  );
+
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
@@ -97,33 +133,9 @@ export function App({
         message = `${message}\n\nUsing this selection:\n\n ${selection}`;
       }
 
-      const nextMessages = [
-        ...messages,
-        {
-          author: "me" as const,
-          body: message,
-          id: crypto.randomUUID(),
-          initials: "ME" as const,
-        },
-      ];
-      setIsLoading(true);
-      setMessages(nextMessages);
-
-      setTimeout(async () => {
-        setIsLoading(false);
-        const response = await aiAgent.prompt(message);
-        setMessages([
-          ...nextMessages,
-          {
-            author: "Falcon AI",
-            body: response,
-            id: crypto.randomUUID(),
-            initials: "AI",
-          },
-        ]);
-      }, 2000);
+      handlePrompt(message);
     },
-    [aiAgent, getSelection, messages, setMessages]
+    [getSelection, handlePrompt]
   );
 
   return (
@@ -165,6 +177,16 @@ export function App({
               <p className={styles.blankSlateDescription}>
                 Ask anything, I'm bored.
               </p>
+              <div className={styles.blankSlateActions}>
+                {prompts.map((prompt) => (
+                  <Button
+                    key={prompt.id}
+                    onPress={() => handlePrompt(prompt.value)}
+                  >
+                    {prompt.value}
+                  </Button>
+                ))}
+              </div>
             </div>
           </div>
         )}

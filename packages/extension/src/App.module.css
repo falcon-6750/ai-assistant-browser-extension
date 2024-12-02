@@ -58,6 +58,15 @@
   text-align: center;
 }
 
+.blankSlateActions {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
 .blankSlateTitle {
   font-size: 2rem;
   font-weight: 600;

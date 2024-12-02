@@ -36,6 +36,23 @@ const recommended = `Here are additional resources to explore topics similar to 
 These resources provide in-depth knowledge and practical applications of cognitive load theory in education and instructional design.
 `;
 
+const topics = `- Theory: An overview of cognitive load theory, including its development and foundational principles.
+- History: The evolution of cognitive load theory, tracing back to the 1950s and the contributions of G.A. Miller.
+- Categories:
+  - Intrinsic Load: The inherent complexity of the material itself.
+  - Germane Load: The mental resources dedicated to processing and understanding the material.
+  - Extraneous Load: The additional load imposed by the way information is presented, which can be minimized through effective instructional design.
+- Measurement: Methods for assessing cognitive load, including subjective and objective techniques.
+- Effects of Heavy Cognitive Load: The impact of excessive cognitive load on learning and performance, such as reduced comprehension and increased errors.
+- Sub-Population Studies:
+  - Individual Differences: Variations in cognitive load experiences among individuals.
+  - Elderly: How aging affects cognitive load and processing capabilities.
+  - College Students: The influence of cognitive load on academic performance.
+  - Children: The role of cognitive load in child development and learning.
+  - Poverty: The relationship between socioeconomic status and cognitive load.
+- Embodiment and Interactivity: The role of physical interaction and engagement in managing cognitive load.
+- Application in Driving and Piloting: How cognitive load theory applies to complex tasks like driving and piloting, where managing information processing is critical.`;
+
 const md = markdownit();
 
 export class FakeAIAgent implements AIAgent {
@@ -46,8 +63,13 @@ export class FakeAIAgent implements AIAgent {
       return md.render(summary);
     } else if (input.startsWith("Recommend")) {
       return md.render(recommended);
+    } else if (input.startsWith("List the topics")) {
+      return md.render(topics);
+    } else if (input.startsWith("When was this developed")) {
+      return "Cognitive load theory was developed in the 1980s.";
+    } else if (input.startsWith("Who developed this")) {
+      return "John Sweller developed cognitive load theory.";
     }
-
     return "I'm sorry, I'm just a prototype. I don't know how to respond to that.";
   }
 }

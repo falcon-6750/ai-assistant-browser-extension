@@ -10,6 +10,11 @@
   justify-content: center;
   padding: 0 0.5rem;
   text-align: center;
+  transition: background-color 0.15s ease-in-out;
+
+  &:hover:not([data-disabled]) {
+    background-color: #525358;
+  }
 
   &[data-disabled] {
     opacity: 0.5;

@@ -8,12 +8,14 @@ The prototype was built with React ARIA, React, TypeScript and Vite in a monorep
 
 ```
 ├── apps/
-│   ├── prototype/     # Functional prototype (simulated browser w/ mock AI)
+│   ├── prototype/  # Functional prototype (simulated browser w/ mock AI)
 ├── packages/
-│   ├── ui/            # Shared UI components
-│   ├── icons/         # SVG icons as React components
-│   ├── mock-browser/  # Browser simulation for prototype
-│   └── extension/     # Core extension logic
+|   ├── eslint-config     # Shared config for eslint
+|   ├── typescript-config # Shared config for typescript
+│   ├── ui/               # Shared UI components
+│   ├── icons/            # SVG icons as React components
+│   ├── mock-browser/     # Browser simulation for prototype
+│   └── extension/        # Core extension UI and logic
 ```
 
 The icons in the icons package are from [Heroicons](https://heroicons.com/).

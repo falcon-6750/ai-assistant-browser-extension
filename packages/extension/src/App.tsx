@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { GraphCanvas } from "reagraph";
 
 import styles from "./App.module.css";
 
@@ -45,14 +46,16 @@ const chats = [
   },
   {
     id: crypto.randomUUID(),
-    title: "Generative AI as a Tool for Enhancing Reflective Learning in Students",
+    title:
+      "Generative AI as a Tool for Enhancing Reflective Learning in Students",
     website: "Arxiv",
     url: "https://arxiv.org/abs/2412.02603",
     date: "Yesterday, 2:00 PM",
   },
   {
     id: crypto.randomUUID(),
-    title: "Federated Motor Imagery Classification for Privacy-Preserving Brain-Computer Interfaces",
+    title:
+      "Federated Motor Imagery Classification for Privacy-Preserving Brain-Computer Interfaces",
     website: "Arxiv",
     url: "https://arxiv.org/abs/2412.01079",
     date: "Three days ago",
@@ -70,8 +73,43 @@ const chats = [
     website: "Arxiv",
     url: "https://arxiv.org/abs/2411.12549",
     date: "More than a week ago",
-  }
-]
+  },
+  {
+    id: crypto.randomUUID(),
+    title:
+      "Gaming I, II, and III: Arcades, Video Game Systems, and Modern Game Streaing Services",
+    website: "Sage Journals",
+    url: "https://journals.sagepub.com/doi/abs/10.1177/15554120231186634",
+    date: "More than a week ago",
+  },
+  {
+    id: crypto.randomUUID(),
+    title: "Preliminary forensic analysis of the XBox One",
+    website: "Elsevier",
+    url: "https://www.sciencedirect.com/science/article/pii/S1742287614000577",
+    date: "One month ago",
+  },
+  {
+    id: crypto.randomUUID(),
+    title: "PS5 vs XBox Series X: A Sentiment Analysis",
+    website: "LUISS",
+    url: "https://tesi.luiss.it/33008/1/722111_D%27AMORE_ROBERTO.pdf",
+    date: "One month ago",
+  },
+  {
+    id: crypto.randomUUID(),
+    title: "Cogitive Load Theory",
+    website: "Medical College of Wisconsin",
+    url: "https://www.mcw.edu/-/media/MCW/Education/Academic-Affairs/OEI/Faculty-Quick-Guides/Cognitive-Load-Theory.pdf",
+    date: "Two months ago",
+  },
+  {
+    id: crypto.randomUUID(),
+    title: "On the role of generative artificial intelligence in the development of brain-computer interfaces",
+    website: "BMC Biomedical Engineering",
+    date: "1 year ago",
+  },
+];
 
 export function App({
   aiAgent,
@@ -88,6 +126,89 @@ export function App({
       body: string;
     }[]
   >([]);
+
+  const [nodes, setNodes] = useState([
+    {
+      id: "hci-0",
+      label: "Cognitive Load (2)",
+      fill: "#075985",
+      data: {
+        type: "HCI",
+      },
+    },
+    {
+      id: "hci-1",
+      label: "Brain-CPU (3)",
+      fill: "#075985",
+      data: {
+        type: "HCI",
+      },
+    },
+    {
+      id: "hci-2",
+      label: "XBox Controllers (1)",
+      fill: "#075985",
+      data: {
+        type: "HCI",
+      },
+    },
+    {
+      id: "ai-0",
+      label: "Generative AI (2)",
+      fill: "#166534",
+      data: {
+        type: "AI",
+      },
+    },
+    {
+      id: "game-0",
+      label: "History (1)",
+      fill: "#c2410c",
+      data: {
+        type: "GAME",
+      },
+    },
+    {
+      id: "game-1",
+      label: "XBox (2)",
+      fill: "#c2410c",
+      data: {
+        type: "GAME",
+      },
+    },
+    {
+      id: "game-2",
+      label: "PS5 (1)",
+      fill: "#c2410c",
+      data: {
+        type: "GAME",
+      },
+    },
+  ] as {
+    id: string;
+    label: string;
+    fill: string;
+    data: {
+      type: string;
+      segment?: string;
+    };
+  }[]);
+
+  const [edges, setEdges] = useState([
+    {
+      source: "game-1",
+      target: "hci-2",
+      id: "game-1-hci-2",
+      label: "XBox",
+    },
+    {
+      source: "hci-1",
+      target: "ai-0",
+      id: "hci-1-ai-0",
+      label: "Brain-CPU-Gen-AI",
+    }
+  ]);
+
   const [prompts, setPrompts] = useState(initialPrompts);
 
   const mainRef = useRef<HTMLDivElement | null>(null);
@@ -131,7 +252,7 @@ export function App({
         { id: crypto.randomUUID(), label: prompt, value: prompt },
       ]);
     },
-    [prompts, setPrompts]
+    [hasPrompt, prompts, setPrompts]
   );
 
   const handlePrompt = useCallback(
@@ -288,14 +409,16 @@ export function App({
           <ul>
             {chats.map((chat) => (
               <li className={styles.chatHistoryItem} key={chat.id}>
-                <a href="#" onClick={handleHistoryItemClick} title={`View chat about ${chat.title}`}>
+                <a
+                  href="#"
+                  onClick={handleHistoryItemClick}
+                  title={`View chat about ${chat.title}`}
+                >
                   <h3>{chat.title}</h3>
                   <p>
                     {chat.website} | Accessed {chat.date}
                   </p>
-                  <p>
-                    {chat.url}
-                  </p>
+                  <p>{chat.url}</p>
                 </a>
               </li>
             ))}
@@ -303,7 +426,21 @@ export function App({
         </article>
       </TabPanel>
       <TabPanel id="graph" className={styles.graph}>
-        <p>Coming soon</p>
+        <GraphCanvas
+          nodes={nodes}
+          draggable
+          edges={edges}
+          clusterAttribute="type"
+          constrainDragging={false}
+        />
+        <div
+          style={{
+            zIndex: 9,
+            position: "absolute",
+            top: 15,
+            right: 15,
+          }}
+        />
       </TabPanel>
     </Tabs>
   );

@@ -162,5 +162,6 @@
 }
 
 .graph {
-  padding: 1rem;
+  position: relative;
+  height: 100%;
 }

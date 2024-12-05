@@ -7,10 +7,13 @@
     "./arrow-down-tray": "./src/ArrowDownTray.tsx",
     "./arrow-left": "./src/ArrowLeft.tsx",
     "./arrow-right": "./src/ArrowRight.tsx",
+    "./chat": "./src/Chat.tsx",
+    "./clock": "./src/Clock.tsx",
     "./chevron-up": "./src/ChevronUp.tsx",
     "./ellipsis-vertical": "./src/EllipsisVertical.tsx",
     "./folder-arrow-down": "./src/FolderArrowDown.tsx",
     "./globe": "./src/Globe.tsx",
+    "./graph": "./src/Graph.tsx",
     "./paper-airplane": "./src/PaperAirplane.tsx",
     "./refresh": "./src/Refresh.tsx",
     "./sparkle": "./src/Sparkle.tsx"

@@ -8,7 +8,8 @@
     "./button": "./src/button.tsx",
     "./card": "./src/card.tsx",
     "./combo-box": "./src/combo-box.tsx",
-    "./message": "./src/message.tsx"
+    "./message": "./src/message.tsx",
+    "./tabs": "./src/tabs.tsx"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",

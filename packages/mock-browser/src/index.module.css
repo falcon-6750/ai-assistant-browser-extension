@@ -12,7 +12,8 @@
 .toolbar {
   background-color: #e3e2e6;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.025);
-  height: 5.5rem;
+  height: auto;
+  overflow: hidden;
   width: 100%;
   z-index: 10;
 }
@@ -20,6 +21,7 @@
 .tabRegion {
   border-top: 1px solid white;
   height: 2.5rem;
+  overflow: hidden;
   width: 100%;
 }
 
@@ -27,6 +29,7 @@
   display: inline-flex;
   height: 2.5rem;
   margin-left: 2.5rem;
+  overflow: hidden;
   padding-top: 0.25rem;
 }
 
@@ -54,6 +57,7 @@
   box-shadow: 0 -0.125rem 0.25rem rgba(0, 0, 0, 0.025);
   border-top: 1px solid #fff;
   height: 3.5rem;
+  overflow: hidden;
   padding: 0 1.125rem;
   width: 100%;
 }
@@ -100,6 +104,7 @@
   height: 2.125rem;
   padding: 0 1.5rem;
   margin: 0 0.75rem;
+  overflow: hidden;
   width: 100%;
 
   &:focus-visible {
@@ -121,6 +126,7 @@
 
 .main {
   flex-grow: 1;
+  overflow: hidden;
   position: relative;
   width: 100%;
 }
@@ -129,7 +135,7 @@
   border: none;
   flex-grow: 1;
   height: 100%;
-  margin-top: 9px;
+  overflow: hidden;
   transition: width 0.1s ease-in-out;
   width: 100%;
 }
@@ -141,10 +147,11 @@
 .extension {
   position: absolute;
   border-left: 1px solid #e3e2e6;
-  bottom: 0;
-  top: 9px;
+  top: 0;
   right: -360px;
   transition: right 0.1s ease-in-out;
+  bottom: 0;
+  overflow: hidden;
   width: 360px;
 }
 

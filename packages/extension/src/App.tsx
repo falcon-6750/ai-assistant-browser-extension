@@ -34,7 +34,7 @@ const initialPrompts = [
 ];
 
 const chatHistoryNotImpleted =
-  "This feature is not implemented in the prototype but image that opens a previous conversation so you can view or continue it.";
+  "This feature is not implemented in the prototype but imagine that click this link opens the conversation so you can review it or carry on with the conversation.";
 
 const chats = [
   {
@@ -105,7 +105,8 @@ const chats = [
   },
   {
     id: crypto.randomUUID(),
-    title: "On the role of generative artificial intelligence in the development of brain-computer interfaces",
+    title:
+      "On the role of generative artificial intelligence in the development of brain-computer interfaces",
     website: "BMC Biomedical Engineering",
     date: "1 year ago",
   },
@@ -127,7 +128,7 @@ export function App({
     }[]
   >([]);
 
-  const [nodes, setNodes] = useState([
+  const [nodes] = useState([
     {
       id: "hci-0",
       label: "Cognitive Load (2)",
@@ -194,7 +195,7 @@ export function App({
     };
   }[]);
 
-  const [edges, setEdges] = useState([
+  const [edges] = useState([
     {
       source: "game-1",
       target: "hci-2",
@@ -206,7 +207,7 @@ export function App({
       target: "ai-0",
       id: "hci-1-ai-0",
       label: "Brain-CPU-Gen-AI",
-    }
+    },
   ]);
 
   const [prompts, setPrompts] = useState(initialPrompts);
@@ -307,9 +308,7 @@ export function App({
   );
 
   const handleHistoryItemClick = useCallback(() => {
-    alert(
-      "Not implemented in prototype but it would open this previous conversation for viewing or continuation"
-    );
+    alert(chatHistoryNotImpleted);
   }, []);
 
   return (

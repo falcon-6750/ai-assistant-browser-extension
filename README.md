@@ -19,6 +19,18 @@ The prototype was built with React ARIA, React, TypeScript and Vite in a monorep
 ```
 
 The icons in the icons package are from [Heroicons](https://heroicons.com/).
+The ui components in the ui package are based on [React Aria Components](https://react-spectrum.adobe.com/react-aria/components.html).
+
+## Documentation
+
+### Packages
+
+- [ESLint Config](./packages/eslint-config/README.md)
+- [Extension](./packages/extension/README.md)
+- [Icons](./packages/icons/README.md)
+- [Mock Browser](./packages/mock-browser/README.md)
+- [TypeScript Config](./packages/typescript-config/README.md)
+- [UI](./packages/ui/README.md)
 
 ## Development: Getting Started
 

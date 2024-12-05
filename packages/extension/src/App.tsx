@@ -15,6 +15,12 @@ import { Message } from "@repo/ui/message";
 import { AIAgent } from ".";
 import { BlankSlate } from "./BlankSlate";
 
+// TODO: Once chat history is saved, reset the chat and load a new url into the iframe.
+//       This will let the user start and save a new conversation.
+//       When that conversation is finished, the user can save it and add it to the chat history.
+//       The new topic will be added to the graph.
+//       Reload the oringal URL and run in a loop.
+
 const initialPrompts = [
   {
     id: crypto.randomUUID(),
@@ -37,13 +43,16 @@ const chatHistoryNotImpleted =
   "This feature is not implemented in the prototype but imagine that clicking this link opens the conversation so you can review it or carry on with the conversation.";
 
 const chats = [
-  {
+  /**
+   * TODO: Save the current chat history and then add this entry to chats.
+   {
     id: crypto.randomUUID(),
     title: "Cognitive Load",
     website: "Wikipedia",
     url: "https://en.wikipedia.org/wiki/Cognitive_load",
     date: "Today, 10:00 AM",
   },
+  */
   {
     id: crypto.randomUUID(),
     title:
@@ -131,7 +140,7 @@ export function App({
   const [nodes] = useState([
     {
       id: "hci-0",
-      label: "Cognitive Load (2)",
+      label: "Cognitive Load (1)", // TODO: Bump the number by one after initial chat history is saved.
       fill: "#075985",
       data: {
         type: "HCI",

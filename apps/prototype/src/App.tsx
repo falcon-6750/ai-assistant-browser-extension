@@ -24,7 +24,7 @@ function App() {
         >
           <Extension
             aiAgent={new FakeAIAgent("You are a helpful assistant.")}
-            getSelection={getSelection}
+            browser={{ getSelection }}
           />
         </MockBrowser>
       </div>

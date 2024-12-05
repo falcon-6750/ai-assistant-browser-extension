@@ -12,7 +12,7 @@ import { Clock } from "@repo/icons/clock";
 import { FolderArrowDown } from "@repo/icons/folder-arrow-down";
 import { Graph } from "@repo/icons/graph";
 import { Message } from "@repo/ui/message";
-import { AIAgent } from ".";
+import { AIAgent, Browser } from ".";
 import { BlankSlate } from "./BlankSlate";
 
 // TODO: Once chat history is saved, reset the chat and load a new url into the iframe.
@@ -123,10 +123,10 @@ const chats = [
 
 export function App({
   aiAgent,
-  getSelection,
+  browser,
 }: {
   aiAgent: AIAgent;
-  getSelection: () => Promise<string>;
+  browser: Browser;
 }) {
   const [messages, setMessages] = useState<
     {
@@ -306,14 +306,14 @@ export function App({
 
       event.currentTarget.reset();
 
-      const selection = await getSelection();
+      const selection = await browser.getSelection();
       if (selection) {
         message = `${message}\n\nUsing this selection:\n\n ${selection}`;
       }
 
       handlePrompt(message);
     },
-    [getSelection, handlePrompt]
+    [browser, handlePrompt]
   );
 
   const handleHistoryItemClick = useCallback(() => {

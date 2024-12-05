@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { useRef } from "react";
 
 import styles from "./App.module.css";
 
@@ -7,14 +7,11 @@ import { MockBrowser } from "@repo/mock-browser";
 
 import { prompts } from "@repo/data/prompts";
 
-import { FakeAIAgent } from "./fake-ai-agent";
+import { FakeAIAgent } from "@repo/fakes/ai-agent";
+import { fakeBrowser } from "@repo/fakes/browser";
 
 function App() {
   const mockBrowserRef = useRef<HTMLDivElement | null>(null);
-
-  const getSelection = useCallback(async () => {
-    return "";
-  }, []);
 
   return (
     <div className={styles.app} ref={mockBrowserRef}>
@@ -26,7 +23,7 @@ function App() {
         >
           <Extension
             aiAgent={new FakeAIAgent("You are a helpful assistant.")}
-            browser={{ getSelection }}
+            browser={fakeBrowser}
             savedPrompts={prompts}
           />
         </MockBrowser>

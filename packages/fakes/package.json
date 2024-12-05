@@ -1,0 +1,14 @@
+{
+  "name": "@repo/fakes",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    "./ai-agent": "./src/ai-agent.ts",
+    "./browser": "./src/browser.ts"
+  },
+  "dependencies": {
+    "@repo/extension": "*",
+    "markdown-it": "^14.1.0"
+  }
+}

@@ -36,4 +36,3 @@ export function Component() {
   return <ArrowLeft className={styles.icon}>
 }
 ```
-

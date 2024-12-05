@@ -23,6 +23,10 @@ The ui components in the ui package are based on [React Aria Components](https:/
 
 ## Documentation
 
+### Apps 
+
+- [Prototype](./apps/prototype/README.md)
+
 ### Packages
 
 - [ESLint Config](./packages/eslint-config/README.md)

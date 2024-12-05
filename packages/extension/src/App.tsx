@@ -34,7 +34,7 @@ const initialPrompts = [
 ];
 
 const chatHistoryNotImpleted =
-  "This feature is not implemented in the prototype but imagine that click this link opens the conversation so you can review it or carry on with the conversation.";
+  "This feature is not implemented in the prototype but imagine that clicking this link opens the conversation so you can review it or carry on with the conversation.";
 
 const chats = [
   {

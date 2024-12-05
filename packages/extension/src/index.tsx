@@ -11,4 +11,16 @@ interface Browser {
   getSelection: () => Promise<string>;
 }
 
-export { type AIAgent, type Browser, App as Extension, EXTENSION_NAME };
+interface SavedPrompt {
+  id: string;
+  label: string;
+  value: string;
+}
+
+export {
+  type AIAgent,
+  type Browser,
+  type SavedPrompt,
+  App as Extension,
+  EXTENSION_NAME,
+};

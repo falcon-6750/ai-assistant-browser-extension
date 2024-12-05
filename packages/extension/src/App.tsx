@@ -12,7 +12,7 @@ import { Clock } from "@repo/icons/clock";
 import { FolderArrowDown } from "@repo/icons/folder-arrow-down";
 import { Graph } from "@repo/icons/graph";
 import { Message } from "@repo/ui/message";
-import { AIAgent, Browser } from ".";
+import { AIAgent, Browser, SavedPrompt } from ".";
 import { BlankSlate } from "./BlankSlate";
 
 // TODO: Once chat history is saved, reset the chat and load a new url into the iframe.
@@ -20,24 +20,6 @@ import { BlankSlate } from "./BlankSlate";
 //       When that conversation is finished, the user can save it and add it to the chat history.
 //       The new topic will be added to the graph.
 //       Reload the oringal URL and run in a loop.
-
-const initialPrompts = [
-  {
-    id: crypto.randomUUID(),
-    label: "List the topics in this page",
-    value: "List the topics in this page",
-  },
-  {
-    id: crypto.randomUUID(),
-    label: "Recommend more content like this",
-    value: "Recommend more content like this",
-  },
-  {
-    id: crypto.randomUUID(),
-    label: "Summarize this page",
-    value: "Summarize this page",
-  },
-];
 
 const chatHistoryNotImpleted =
   "This feature is not implemented in the prototype but imagine that clicking this link opens the conversation so you can review it or carry on with the conversation.";
@@ -124,9 +106,11 @@ const chats = [
 export function App({
   aiAgent,
   browser,
+  savedPrompts,
 }: {
   aiAgent: AIAgent;
   browser: Browser;
+  savedPrompts: SavedPrompt[];
 }) {
   const [messages, setMessages] = useState<
     {
@@ -219,7 +203,7 @@ export function App({
     },
   ]);
 
-  const [prompts, setPrompts] = useState(initialPrompts);
+  const [prompts, setPrompts] = useState(savedPrompts);
 
   const mainRef = useRef<HTMLDivElement | null>(null);
   const [isLoading, setIsLoading] = useState(false);

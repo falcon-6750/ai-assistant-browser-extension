@@ -5,6 +5,8 @@ import styles from "./App.module.css";
 import { Extension, EXTENSION_NAME } from "@repo/extension";
 import { MockBrowser } from "@repo/mock-browser";
 
+import { prompts } from "@repo/data/prompts";
+
 import { FakeAIAgent } from "./fake-ai-agent";
 
 function App() {
@@ -25,6 +27,7 @@ function App() {
           <Extension
             aiAgent={new FakeAIAgent("You are a helpful assistant.")}
             browser={{ getSelection }}
+            savedPrompts={prompts}
           />
         </MockBrowser>
       </div>

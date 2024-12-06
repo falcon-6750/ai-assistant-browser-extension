@@ -9,6 +9,7 @@ import { FolderArrowDown } from "@repo/icons/folder-arrow-down";
 import { Message } from "@repo/ui/message";
 import { AIAgent } from ".";
 import { BlankSlate } from "./BlankSlate";
+import { Memory } from "../../icons/src/Memory";
 
 const initialPrompts = [
   {
@@ -193,6 +194,15 @@ export function App({
       </main>
       <footer className={styles.footer}>
         <form className={styles.form} onSubmit={handleSubmit}>
+        <Button
+            aria-label="Send"
+            type="submit"
+            isIcon
+            isInlineSubmit
+            isDisabled={isLoading}
+          >
+            <Memory className={styles.buttonIcon}/>
+          </Button>
           <ComboBox
             className={styles.comboBox}
             name="message"

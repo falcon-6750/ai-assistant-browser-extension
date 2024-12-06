@@ -9,6 +9,9 @@ import { prompts } from "@repo/data/prompts";
 
 import { FakeAIAgent } from "@repo/fakes/ai-agent";
 import { fakeBrowser } from "@repo/fakes/browser";
+import { chats } from "@repo/fakes/chats";
+import { edges } from "@repo/fakes/edges";
+import { nodes } from "@repo/fakes/nodes";
 
 function App() {
   const mockBrowserRef = useRef<HTMLDivElement | null>(null);
@@ -24,6 +27,9 @@ function App() {
           <Extension
             aiAgent={new FakeAIAgent("You are a helpful assistant.")}
             browser={fakeBrowser}
+            savedChats={chats}
+            savedEdges={edges}
+            savedNodes={nodes}
             savedPrompts={prompts}
           />
         </MockBrowser>

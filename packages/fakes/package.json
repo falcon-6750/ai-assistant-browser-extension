@@ -5,7 +5,10 @@
   "private": true,
   "exports": {
     "./ai-agent": "./src/ai-agent.ts",
-    "./browser": "./src/browser.ts"
+    "./browser": "./src/browser.ts",
+    "./chats": "./src/chats.ts",
+    "./edges": "./src/edges.ts",
+    "./nodes": "./src/nodes.ts"
   },
   "dependencies": {
     "@repo/extension": "*",

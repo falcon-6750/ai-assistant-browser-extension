@@ -165,3 +165,10 @@
   position: relative;
   height: 100%;
 }
+
+.graphCanvas {
+  z-index: 9;
+  position: absolute;
+  top: 15;
+  right: 15;
+}

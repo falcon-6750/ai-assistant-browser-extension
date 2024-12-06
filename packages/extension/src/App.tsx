@@ -1,7 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import { GraphCanvas } from "reagraph";
 
 import styles from "./App.module.css";
+
+import { useAutoScroll } from "./hooks";
 
 import { PaperAirplane } from "@repo/icons/paper-airplane";
 import { Button } from "@repo/ui/button";
@@ -12,7 +14,15 @@ import { Clock } from "@repo/icons/clock";
 import { FolderArrowDown } from "@repo/icons/folder-arrow-down";
 import { Graph } from "@repo/icons/graph";
 import { Message } from "@repo/ui/message";
-import { AIAgent, Browser, SavedPrompt } from ".";
+import type {
+  AIAgent,
+  Browser,
+  ChatMessage,
+  SavedChat,
+  SavedEdge,
+  SavedNode,
+  SavedPrompt,
+} from ".";
 import { BlankSlate } from "./BlankSlate";
 
 // TODO: Once chat history is saved, reset the chat and load a new url into the iframe.
@@ -24,209 +34,47 @@ import { BlankSlate } from "./BlankSlate";
 const chatHistoryNotImpleted =
   "This feature is not implemented in the prototype but imagine that clicking this link opens the conversation so you can review it or carry on with the conversation.";
 
-const chats = [
-  /**
-   * TODO: Save the current chat history and then add this entry to chats.
-   {
-    id: crypto.randomUUID(),
-    title: "Cognitive Load",
-    website: "Wikipedia",
-    url: "https://en.wikipedia.org/wiki/Cognitive_load",
-    date: "Today, 10:00 AM",
-  },
-  */
-  {
-    id: crypto.randomUUID(),
-    title:
-      "Generative AI as a Tool for Enhancing Reflective Learning in Students",
-    website: "Arxiv",
-    url: "https://arxiv.org/abs/2412.02603",
-    date: "Yesterday, 2:00 PM",
-  },
-  {
-    id: crypto.randomUUID(),
-    title:
-      "Federated Motor Imagery Classification for Privacy-Preserving Brain-Computer Interfaces",
-    website: "Arxiv",
-    url: "https://arxiv.org/abs/2412.01079",
-    date: "Three days ago",
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "That Flick is Sick: Gyroscope Integration in Xbox Controllers",
-    website: "Arxiv",
-    url: "https://arxiv.org/abs/2411.15538",
-    date: "One week ago",
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "A Survey of the State of the Art in Brain-Computer Interfaces",
-    website: "Arxiv",
-    url: "https://arxiv.org/abs/2411.12549",
-    date: "More than a week ago",
-  },
-  {
-    id: crypto.randomUUID(),
-    title:
-      "Gaming I, II, and III: Arcades, Video Game Systems, and Modern Game Streaing Services",
-    website: "Sage Journals",
-    url: "https://journals.sagepub.com/doi/abs/10.1177/15554120231186634",
-    date: "More than a week ago",
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "Preliminary forensic analysis of the XBox One",
-    website: "Elsevier",
-    url: "https://www.sciencedirect.com/science/article/pii/S1742287614000577",
-    date: "One month ago",
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "PS5 vs XBox Series X: A Sentiment Analysis",
-    website: "LUISS",
-    url: "https://tesi.luiss.it/33008/1/722111_D%27AMORE_ROBERTO.pdf",
-    date: "One month ago",
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "Cogitive Load Theory",
-    website: "Medical College of Wisconsin",
-    url: "https://www.mcw.edu/-/media/MCW/Education/Academic-Affairs/OEI/Faculty-Quick-Guides/Cognitive-Load-Theory.pdf",
-    date: "Two months ago",
-  },
-  {
-    id: crypto.randomUUID(),
-    title:
-      "On the role of generative artificial intelligence in the development of brain-computer interfaces",
-    website: "BMC Biomedical Engineering",
-    date: "1 year ago",
-  },
-];
+/**
+ * TODO: Save the current chat history and then add this entry to chats.
+ {
+  id: crypto.randomUUID(),
+  title: "Cognitive Load",
+  website: "Wikipedia",
+  url: "https://en.wikipedia.org/wiki/Cognitive_load",
+  date: "Today, 10:00 AM",
+},
+*/
 
 export function App({
   aiAgent,
   browser,
+  savedChats,
+  savedEdges,
+  savedNodes,
   savedPrompts,
 }: {
   aiAgent: AIAgent;
   browser: Browser;
+  savedChats: SavedChat[];
+  savedEdges: SavedEdge[];
+  savedNodes: SavedNode[];
   savedPrompts: SavedPrompt[];
 }) {
-  const [messages, setMessages] = useState<
-    {
-      author: "me" | "Falcon AI";
-      id: string;
-      initials: "ME" | "AI";
-      body: string;
-    }[]
-  >([]);
-
-  const [nodes] = useState([
-    {
-      id: "hci-0",
-      label: "Cognitive Load (1)", // TODO: Bump the number by one after initial chat history is saved.
-      fill: "#075985",
-      data: {
-        type: "HCI",
-      },
-    },
-    {
-      id: "hci-1",
-      label: "Brain-CPU (3)",
-      fill: "#075985",
-      data: {
-        type: "HCI",
-      },
-    },
-    {
-      id: "hci-2",
-      label: "XBox Controllers (1)",
-      fill: "#075985",
-      data: {
-        type: "HCI",
-      },
-    },
-    {
-      id: "ai-0",
-      label: "Generative AI (2)",
-      fill: "#166534",
-      data: {
-        type: "AI",
-      },
-    },
-    {
-      id: "game-0",
-      label: "History (1)",
-      fill: "#c2410c",
-      data: {
-        type: "GAME",
-      },
-    },
-    {
-      id: "game-1",
-      label: "XBox (2)",
-      fill: "#c2410c",
-      data: {
-        type: "GAME",
-      },
-    },
-    {
-      id: "game-2",
-      label: "PS5 (1)",
-      fill: "#c2410c",
-      data: {
-        type: "GAME",
-      },
-    },
-  ] as {
-    id: string;
-    label: string;
-    fill: string;
-    data: {
-      type: string;
-      segment?: string;
-    };
-  }[]);
-
-  const [edges] = useState([
-    {
-      source: "game-1",
-      target: "hci-2",
-      id: "game-1-hci-2",
-      label: "XBox",
-    },
-    {
-      source: "hci-1",
-      target: "ai-0",
-      id: "hci-1-ai-0",
-      label: "Brain-CPU-Gen-AI",
-    },
-  ]);
-
+  // Collections
+  const [chats] = useState(savedChats);
+  const [nodes] = useState(savedNodes);
+  const [edges] = useState(savedEdges);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [prompts, setPrompts] = useState(savedPrompts);
 
-  const mainRef = useRef<HTMLDivElement | null>(null);
+  // Flags
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    if (!mainRef.current) {
-      return;
-    }
-
-    const nodes: NodeListOf<HTMLLIElement> = mainRef.current.querySelectorAll(
-      "#messages-list > li"
-    );
-    if (!nodes.length) {
-      return;
-    }
-
-    const lastNode = nodes[nodes.length - 1];
-    const offset = lastNode?.offsetTop ?? 0;
-    mainRef.current.scrollTo({
-      top: offset - 60,
-      behavior: "smooth",
-    });
-  }, [messages]);
+  // DOM refs
+  const mainRef = useAutoScroll({
+    observe: messages,
+    scrollTo: "#messages-list > li",
+  });
 
   const hasPrompt = useCallback(
     (prompt: string) => {
@@ -425,14 +273,7 @@ export function App({
           clusterAttribute="type"
           constrainDragging={false}
         />
-        <div
-          style={{
-            zIndex: 9,
-            position: "absolute",
-            top: 15,
-            right: 15,
-          }}
-        />
+        <div className={styles.graphCanvas} />
       </TabPanel>
     </Tabs>
   );

@@ -8,7 +8,7 @@ import { useAutoScroll } from "./hooks";
 import { PaperAirplane } from "@repo/icons/paper-airplane";
 import { Button } from "@repo/ui/button";
 import { ComboBox } from "@repo/ui/combo-box";
-import { Tab, TabList, TabPanel, Tabs } from "@repo/ui/tabs";
+import { Tab, TabList, TabPanel, Tabs, type TabKey } from "@repo/ui/tabs";
 import { Chat } from "@repo/icons/chat";
 import { Clock } from "@repo/icons/clock";
 import { FolderArrowDown } from "@repo/icons/folder-arrow-down";
@@ -69,6 +69,7 @@ export function App({
 
   // Flags
   const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState<TabKey>("chat");
 
   // DOM refs
   const mainRef = useAutoScroll({
@@ -153,7 +154,7 @@ export function App({
   }, []);
 
   return (
-    <Tabs>
+    <Tabs selectedKey={activeTab} onSelectionChange={setActiveTab}>
       <TabList aria-label="Features">
         <Tab id="chat">
           <Chat className={styles.tabIcon} />

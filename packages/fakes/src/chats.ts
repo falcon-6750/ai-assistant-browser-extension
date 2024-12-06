@@ -6,6 +6,14 @@ export const chats = [
     website: "Arxiv",
     url: "https://arxiv.org/abs/2412.02603",
     date: "Yesterday, 2:00 PM",
+    messages: [
+      {
+        id: crypto.randomUUID(),
+        author: "me" as const,
+        initials: "ME" as const,
+        body: "Recommend more content like this",
+      },
+    ],
   },
   {
     id: crypto.randomUUID(),
@@ -14,6 +22,7 @@ export const chats = [
     website: "Arxiv",
     url: "https://arxiv.org/abs/2412.01079",
     date: "Three days ago",
+    messages: [],
   },
   {
     id: crypto.randomUUID(),
@@ -21,6 +30,7 @@ export const chats = [
     website: "Arxiv",
     url: "https://arxiv.org/abs/2411.15538",
     date: "One week ago",
+    messages: [],
   },
   {
     id: crypto.randomUUID(),
@@ -28,6 +38,7 @@ export const chats = [
     website: "Arxiv",
     url: "https://arxiv.org/abs/2411.12549",
     date: "More than a week ago",
+    messages: [],
   },
   {
     id: crypto.randomUUID(),
@@ -36,6 +47,7 @@ export const chats = [
     website: "Sage Journals",
     url: "https://journals.sagepub.com/doi/abs/10.1177/15554120231186634",
     date: "More than a week ago",
+    messages: [],
   },
   {
     id: crypto.randomUUID(),
@@ -43,6 +55,7 @@ export const chats = [
     website: "Elsevier",
     url: "https://www.sciencedirect.com/science/article/pii/S1742287614000577",
     date: "One month ago",
+    messages: [],
   },
   {
     id: crypto.randomUUID(),
@@ -50,6 +63,7 @@ export const chats = [
     website: "LUISS",
     url: "https://tesi.luiss.it/33008/1/722111_D%27AMORE_ROBERTO.pdf",
     date: "One month ago",
+    messages: [],
   },
   {
     id: crypto.randomUUID(),
@@ -57,6 +71,7 @@ export const chats = [
     website: "Medical College of Wisconsin",
     url: "https://www.mcw.edu/-/media/MCW/Education/Academic-Affairs/OEI/Faculty-Quick-Guides/Cognitive-Load-Theory.pdf",
     date: "Two months ago",
+    messages: [],
   },
   {
     id: crypto.randomUUID(),
@@ -65,5 +80,6 @@ export const chats = [
     website: "BMC Biomedical Engineering",
     url: "https://bmcbiomedeng.biomedcentral.com/articles/10.1186/s42490-024-00080-2",
     date: "1 year ago",
+    messages: [],
   },
 ];

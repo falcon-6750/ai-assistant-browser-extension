@@ -24,6 +24,7 @@ interface SavedChat {
   website: string;
   url: string;
   date: string;
+  messages: ChatMessage[];
 }
 
 interface SavedEdge {

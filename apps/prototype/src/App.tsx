@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import styles from "./App.module.css";
 
@@ -15,18 +15,26 @@ import { nodes } from "@repo/fakes/nodes";
 
 function App() {
   const mockBrowserRef = useRef<HTMLDivElement | null>(null);
+  const [site, setSite] = useState<{
+    name: string;
+    url: string;
+  }>({
+    name: "Cognitive Load | Wikipedia",
+    url: "https://en.wikipedia.org/wiki/Cognitive_load"
+  })
 
   return (
     <div className={styles.app} ref={mockBrowserRef}>
       <div className={styles.container}>
         <MockBrowser
           extensionName={EXTENSION_NAME}
-          websiteName="Cognitive Load | Wikipedia"
-          websiteUrl="https://en.wikipedia.org/wiki/Cognitive_load"
+          websiteName={site.name}
+          websiteUrl={site.url}
         >
           <Extension
             aiAgent={new FakeAIAgent("You are a helpful assistant.")}
             browser={fakeBrowser}
+            changeSite={setSite}
             savedChats={chats}
             savedEdges={edges}
             savedNodes={nodes}

@@ -16,6 +16,7 @@ interface ChatMessage {
   id: string;
   initials: "ME" | "AI";
   body: string;
+  image?: string;
 }
 
 interface SavedChat {
@@ -25,6 +26,7 @@ interface SavedChat {
   url: string;
   date: string;
   messages: ChatMessage[];
+  tags: string[];
 }
 
 interface SavedEdge {

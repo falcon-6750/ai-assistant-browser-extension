@@ -1,10 +1,11 @@
 import { useCallback, useState } from "react";
-import { GraphCanvas } from "reagraph";
+import { GraphCanvas, InternalGraphNode } from "reagraph";
 
 import styles from "./App.module.css";
 
 import { useAutoScroll } from "./hooks";
 
+import { Bookmark } from "@repo/icons/bookmark";
 import { PaperAirplane } from "@repo/icons/paper-airplane";
 import { Button } from "@repo/ui/button";
 import { ComboBox } from "@repo/ui/combo-box";
@@ -25,29 +26,13 @@ import type {
 } from ".";
 import { BlankSlate } from "./BlankSlate";
 
-// TODO: Once chat history is saved, reset the chat and load a new url into the iframe.
-//       This will let the user start and save a new conversation.
-//       When that conversation is finished, the user can save it and add it to the chat history.
-//       The new topic will be added to the graph.
-//       Reload the oringal URL and run in a loop.
-
 const chatHistoryNotImpleted =
-  "This feature is not implemented in the prototype but imagine that clicking this link opens the conversation so you can review it or carry on with the conversation.";
-
-/**
- * TODO: Save the current chat history and then add this entry to chats.
- {
-  id: crypto.randomUUID(),
-  title: "Cognitive Load",
-  website: "Wikipedia",
-  url: "https://en.wikipedia.org/wiki/Cognitive_load",
-  date: "Today, 10:00 AM",
-},
-*/
+  "Entries from Arxiv and Sage Journals cannot be displayed at this time. Please try another entry.";
 
 export function App({
   aiAgent,
   browser,
+  changeSite,
   savedChats,
   savedEdges,
   savedNodes,
@@ -55,13 +40,14 @@ export function App({
 }: {
   aiAgent: AIAgent;
   browser: Browser;
+  changeSite: (site: { name: string; url: string }) => void;
   savedChats: SavedChat[];
   savedEdges: SavedEdge[];
   savedNodes: SavedNode[];
   savedPrompts: SavedPrompt[];
 }) {
   // Collections
-  const [chats] = useState(savedChats);
+  const [chats, setChats] = useState(savedChats);
   const [nodes] = useState(savedNodes);
   const [edges] = useState(savedEdges);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -69,7 +55,9 @@ export function App({
 
   // Flags
   const [isLoading, setIsLoading] = useState(false);
+  const [isSaveDisabled, setIsSaveDisabled] = useState(false);
   const [activeTab, setActiveTab] = useState<TabKey>("chat");
+  const [filter, setFilter] = useState("");
 
   // DOM refs
   const mainRef = useAutoScroll({
@@ -149,9 +137,54 @@ export function App({
     [browser, handlePrompt]
   );
 
-  const handleHistoryItemClick = useCallback(() => {
-    alert(chatHistoryNotImpleted);
-  }, []);
+  const handleHistoryItemClick = useCallback((chat: SavedChat) => {
+    if (chat.website === "Arxiv") {
+      alert(chatHistoryNotImpleted);
+      return;
+    }
+    changeSite({
+      name: chat.title,
+      url: chat.url,
+    });
+    setMessages(chat.messages);
+    setActiveTab("chat");
+  }, [changeSite, setActiveTab, setMessages]);
+
+  const handleSave = useCallback(() => {
+    if (isSaveDisabled) {
+      alert("This prototype was designed to save chats only once to give an idea of how it works. Reload the webpage to start a new chat if you'd like to try again.");
+      return;
+    }
+
+    setIsSaveDisabled(true);
+    setChats([
+      {
+        id: crypto.randomUUID(),
+        title: "Cognitive Load",
+        website: "Wikipedia",
+        url: "https://en.wikipedia.org/wiki/Cognitive_load",
+        date: "Today, 10:00 AM",
+        messages,
+        tags: ["Cognitive Load"],
+      },
+      ...chats,
+    ])
+    setMessages([])
+    setActiveTab("history")
+  }, [isSaveDisabled, setIsSaveDisabled, setChats, setMessages, setActiveTab, messages, chats]);
+
+  const handleNodeClick = useCallback((node: InternalGraphNode) => {
+    const { label = ''} = node;
+    const tag = label.split("(")[0]?.trim().toLowerCase() ?? ''
+    if (tag === filter) {
+      setFilter(''); // Clear filter
+    } else {
+      setFilter(tag);
+    }
+    setActiveTab("history");
+  }, [filter, setFilter, setActiveTab]);
+
+  const disallowDynamicInteraction = isSaveDisabled || chats.some({ url }) => url);
 
   return (
     <Tabs selectedKey={activeTab} onSelectionChange={setActiveTab}>
@@ -179,6 +212,7 @@ export function App({
                     <Message
                       author={message.author}
                       body={message.body}
+                      image={message.image}
                       initials={message.initials}
                       isBordered={message.author === "me"}
                     />
@@ -224,6 +258,9 @@ export function App({
             )}
           </main>
           <footer className={styles.footer}>
+            <Button aria-label="Save Chat" onPress={handleSave} isDisabled={isSaveDisabled}>
+              <Bookmark className={styles.buttonIcon} />
+            </Button>
             <form className={styles.form} onSubmit={handleSubmit}>
               <ComboBox
                 className={styles.comboBox}
@@ -246,13 +283,31 @@ export function App({
         </article>
       </TabPanel>
       <TabPanel id="history">
+        {filter && (
+          <div className={styles.historyFilter}>
+            <p>Filter by: {filter}</p>
+            <a href="#" onClick={(e: React.MouseEvent) => {
+              e.preventDefault();
+              setFilter('');
+            }}>
+              Clear
+            </a>
+          </div>
+        )}
         <article className={styles.history}>
           <ul>
-            {chats.map((chat) => (
+            {chats.filter(({ tags }) => {
+              if (!filter) return true;
+
+              return tags.includes(filter);
+            }).map((chat) => (
               <li className={styles.chatHistoryItem} key={chat.id}>
                 <a
                   href="#"
-                  onClick={handleHistoryItemClick}
+                  onClick={(e: React.MouseEvent) => {
+                    e.preventDefault();
+                    handleHistoryItemClick(chat);
+                  }}
                   title={`View chat about ${chat.title}`}
                 >
                   <h3>{chat.title}</h3>
@@ -273,6 +328,7 @@ export function App({
           edges={edges}
           clusterAttribute="type"
           constrainDragging={false}
+          onNodeClick={handleNodeClick}
         />
         <div className={styles.graphCanvas} />
       </TabPanel>

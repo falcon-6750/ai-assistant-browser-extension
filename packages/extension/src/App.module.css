@@ -21,6 +21,8 @@
 .footer {
   background-color: #faf8fa;
   border-top: 1px solid #e3e2e6;
+  display: flex;
+  gap: 0.75rem;
   overflow: hidden;
   padding: 1rem 0.75rem;
 }
@@ -171,4 +173,18 @@
   position: absolute;
   top: 15;
   right: 15;
+}
+
+.historyFilter {
+  background-color: #faf8fa;
+  display: flex;
+  font-size: 0.875rem;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  justify-content: space-between;
+
+  p {
+    margin: 0;
+  }
 }

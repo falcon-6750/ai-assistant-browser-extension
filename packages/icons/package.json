@@ -7,6 +7,7 @@
     "./arrow-down-tray": "./src/ArrowDownTray.tsx",
     "./arrow-left": "./src/ArrowLeft.tsx",
     "./arrow-right": "./src/ArrowRight.tsx",
+    "./bookmark": "./src/Bookmark.tsx",
     "./chat": "./src/Chat.tsx",
     "./clock": "./src/Clock.tsx",
     "./chevron-up": "./src/ChevronUp.tsx",

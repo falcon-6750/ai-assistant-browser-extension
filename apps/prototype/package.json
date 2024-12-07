@@ -11,7 +11,9 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@repo/data": "*",
     "@repo/extension": "*",
+    "@repo/fakes": "*",
     "@repo/mock-browser": "*",
     "@repo/ui": "*",
     "markdown-it": "^14.1.0",

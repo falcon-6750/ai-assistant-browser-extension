@@ -1,50 +1,13 @@
-# React + TypeScript + Vite
+# Prototype
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is exploring a user interface for a browser extension. It is the goal to get user feedback on the prototype. However, browser extensions are difficult to share with users as they require downloading and installing software on the end-user's machine. This prototype was built to demonstrate the extension for early user testing. It shows the extenion in a simulated browser window so users are put into the proper context for interacting with it. At this stage, the extension is heavily mocked, using a fake AI Agent. This was done because the plan for the extension was to use Gemini Nano which is an embedded LLM in Chrome, however we could not rely on users having this installed because (1) they may be on a different browser and (2) Gemini Nano is not broadly available at the time of this writing (Dec 5, 2024) and so it needs to enabled via Chrome feature flags. Building the extenion out with a fake AI agent in a simulated browser allows for maximizing the base of potential users to test the prototype with although it is limited and contrived compared to a real browser extension experiencing using an actual AI agent. Nonetheless, for early staging prototyping and feedback, this should be an acceptable compromise.
 
-Currently, two official plugins are available:
+This app was scaffoled with Vite using its CLI: `npm create vite@latest` with React and TypeScript options. The scaffolding was then adapted for this app and the app was built upon it.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Getting Started
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
 ```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+npm install
+npm run dev
+open localhost:5173
 ```

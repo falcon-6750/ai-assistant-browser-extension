@@ -15,3 +15,9 @@
 .messageAvatar {
   flex-shrink: 0;
 }
+
+.messageImage {
+  height: auto;
+  margin-top: 0.5rem;
+  width: 100%;
+}

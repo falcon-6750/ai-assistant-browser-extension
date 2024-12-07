@@ -19,6 +19,7 @@
     "typescript": "5.5.4"
   },
   "dependencies": {
-    "@repo/ui": "*"
+    "@repo/ui": "*",
+    "reagraph": "^4.21.0"
   }
 }

@@ -10,6 +10,9 @@
   background-color: transparent;
   border: none;
   height: unset;
+  margin-right: 0.25rem;
+  padding: 0;
+  width: 1rem;
 }
 
 .buttonIcon {

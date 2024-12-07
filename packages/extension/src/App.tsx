@@ -1,71 +1,70 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
+import { GraphCanvas, InternalGraphNode } from "reagraph";
 
 import styles from "./App.module.css";
 
+import { useAutoScroll } from "./hooks";
+
+import { Bookmark } from "@repo/icons/bookmark";
 import { PaperAirplane } from "@repo/icons/paper-airplane";
 import { Button } from "@repo/ui/button";
 import { ComboBox } from "@repo/ui/combo-box";
+import { Tab, TabList, TabPanel, Tabs, type TabKey } from "@repo/ui/tabs";
+import { Chat } from "@repo/icons/chat";
+import { Clock } from "@repo/icons/clock";
 import { FolderArrowDown } from "@repo/icons/folder-arrow-down";
+import { Graph } from "@repo/icons/graph";
 import { Message } from "@repo/ui/message";
-import { AIAgent } from ".";
+import type {
+  AIAgent,
+  Browser,
+  ChatMessage,
+  SavedChat,
+  SavedEdge,
+  SavedNode,
+  SavedPrompt,
+} from ".";
 import { BlankSlate } from "./BlankSlate";
-import { Memory } from "../../icons/src/Memory";
 
-const initialPrompts = [
-  {
-    id: crypto.randomUUID(),
-    label: "List the topics in this page",
-    value: "List the topics in this page",
-  },
-  {
-    id: crypto.randomUUID(),
-    label: "Recommend more content like this",
-    value: "Recommend more content like this",
-  },
-  {
-    id: crypto.randomUUID(),
-    label: "Summarize this page",
-    value: "Summarize this page",
-  },
-];
+const chatHistoryNotImpleted =
+  "Entries from Arxiv and Sage Journals cannot be displayed at this time. Please try another entry.";
 
 export function App({
   aiAgent,
-  getSelection,
+  browser,
+  changeSite,
+  savedChats,
+  savedEdges,
+  savedNodes,
+  savedPrompts,
 }: {
   aiAgent: AIAgent;
-  getSelection: () => Promise<string>;
+  browser: Browser;
+  changeSite: (site: { name: string; url: string }) => void;
+  currentSite: { name: string; url: string };
+  savedChats: SavedChat[];
+  savedEdges: SavedEdge[];
+  savedNodes: SavedNode[];
+  savedPrompts: SavedPrompt[];
 }) {
-  const [messages, setMessages] = useState<
-    {
-      author: "me" | "Falcon AI";
-      id: string;
-      initials: "ME" | "AI";
-      body: string;
-    }[]
-  >([]);
-  const [prompts, setPrompts] = useState(initialPrompts);
+  // Collections
+  const [chats, setChats] = useState(savedChats);
+  const [nodes, setNodes] = useState(savedNodes);
+  const [edges] = useState(savedEdges);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [prompts, setPrompts] = useState(savedPrompts);
 
-  const mainRef = useRef<HTMLDivElement | null>(null);
+  // Flags
   const [isLoading, setIsLoading] = useState(false);
+  const [isSaveDisabled, setIsSaveDisabled] = useState(false);
+  const [activeTab, setActiveTab] = useState<TabKey>("chat");
+  const [filter, setFilter] = useState("");
 
-  useEffect(() => {
-    if (!mainRef.current) {
-      return;
-    }
-
-    const nodes = mainRef.current.querySelectorAll("#messages-list > li");
-    if (!nodes.length) {
-      return;
-    }
-
-    const lastNode = nodes[nodes.length - 1];
-    lastNode?.scrollIntoView({
-      block: "nearest",
-      inline: "nearest",
-      behavior: "smooth",
-    });
-  }, [messages]);
+  // DOM refs
+  const mainRef = useAutoScroll({
+    observe: messages,
+    scrollTo: "#messages-list > li",
+  });
 
   const hasPrompt = useCallback(
     (prompt: string) => {
@@ -85,7 +84,7 @@ export function App({
         { id: crypto.randomUUID(), label: prompt, value: prompt },
       ]);
     },
-    [prompts, setPrompts]
+    [hasPrompt, prompts, setPrompts]
   );
 
   const handlePrompt = useCallback(
@@ -129,98 +128,247 @@ export function App({
 
       event.currentTarget.reset();
 
-      const selection = await getSelection();
+      const selection = await browser.getSelection();
       if (selection) {
         message = `${message}\n\nUsing this selection:\n\n ${selection}`;
       }
 
       handlePrompt(message);
     },
-    [getSelection, handlePrompt]
+    [browser, handlePrompt]
+  );
+
+  const handleHistoryItemClick = useCallback(
+    (chat: SavedChat) => {
+      if (chat.website === "Arxiv") {
+        alert(chatHistoryNotImpleted);
+        return;
+      }
+      changeSite({
+        name: chat.title,
+        url: chat.url,
+      });
+      setMessages(chat.messages);
+      setActiveTab("chat");
+    },
+    [changeSite, setActiveTab, setMessages]
+  );
+
+  const handleSave = useCallback(() => {
+    if (isSaveDisabled) {
+      alert(
+        "This prototype was designed to save chats only once to give an idea of how it works. Reload the webpage to start a new chat if you'd like to try again."
+      );
+      return;
+    }
+
+    setIsSaveDisabled(true);
+    setChats([
+      {
+        id: crypto.randomUUID(),
+        title: "Cognitive Load",
+        website: "Wikipedia",
+        url: "https://en.wikipedia.org/wiki/Cognitive_load",
+        date: "Today, 10:00 AM",
+        messages,
+        tags: ["cognitive load"],
+      },
+      ...chats,
+    ]);
+    setNodes([
+      ...nodes.map((node) => {
+        if (node.label.includes("Cognitive Load")) {
+          return {
+            ...node,
+            label: `Cognitive Load (2)`,
+          };
+        }
+
+        return node;
+      }),
+    ]);
+    setMessages([]);
+    setActiveTab("history");
+  }, [
+    isSaveDisabled,
+    setIsSaveDisabled,
+    setChats,
+    setMessages,
+    setActiveTab,
+    messages,
+    nodes,
+    chats,
+  ]);
+
+  const handleNodeClick = useCallback(
+    (node: InternalGraphNode) => {
+      const { label = "" } = node;
+      const tag = label.split("(")[0]?.trim().toLowerCase() ?? "";
+      if (tag === filter) {
+        setFilter(""); // Clear filter
+      } else {
+        setFilter(tag);
+      }
+      setActiveTab("history");
+    },
+    [filter, setFilter, setActiveTab]
   );
 
   return (
-    <article className={styles.app}>
-      <main className={styles.main} ref={mainRef}>
-        {messages.length > 0 && (
-          <ul id="messages-list" className={styles.messages}>
-            {messages.map((message) => (
-              <li key={message.id}>
-                <Message
-                  author={message.author}
-                  body={message.body}
-                  initials={message.initials}
-                  isBordered={message.author === "me"}
-                />
-                {message.author === "me" && !hasPrompt(message.body) && (
-                  <div className={styles.promptActions}>
-                    <a
-                      className={styles.savePrompt}
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleSavePrompt(message.body);
-                      }}
-                    >
-                      <FolderArrowDown className={styles.savePromptIcon} /> Save
-                    </a>
-                  </div>
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
-        {messages.length === 0 && (
-          <div className={styles.blankSlate}>
-            <div>
-              <BlankSlate />
-              <h2 className={styles.blankSlateTitle}>Welcome human!</h2>
-              <p className={styles.blankSlateDescription}>
-                Ask anything, I'm bored.
-              </p>
-              <div className={styles.blankSlateActions}>
-                {prompts.map((prompt) => (
-                  <Button
-                    key={prompt.id}
-                    onPress={() => handlePrompt(prompt.value)}
-                  >
-                    {prompt.value}
-                  </Button>
+    <Tabs selectedKey={activeTab} onSelectionChange={setActiveTab}>
+      <TabList aria-label="Features">
+        <Tab id="chat">
+          <Chat className={styles.tabIcon} />
+          Chat
+        </Tab>
+        <Tab id="history">
+          <Clock className={styles.tabIcon} />
+          History
+        </Tab>
+        <Tab id="graph">
+          <Graph className={styles.tabIcon} />
+          Graph
+        </Tab>
+      </TabList>
+      <TabPanel id="chat">
+        <article className={styles.app}>
+          <main className={styles.main} ref={mainRef}>
+            {messages.length > 0 && (
+              <ul id="messages-list" className={styles.messages}>
+                {messages.map((message) => (
+                  <li key={message.id}>
+                    <Message
+                      author={message.author}
+                      body={message.body}
+                      image={message.image}
+                      initials={message.initials}
+                      isBordered={message.author === "me"}
+                    />
+                    {message.author === "me" && !hasPrompt(message.body) && (
+                      <div className={styles.promptActions}>
+                        <a
+                          className={styles.savePrompt}
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleSavePrompt(message.body);
+                          }}
+                        >
+                          <FolderArrowDown className={styles.savePromptIcon} />{" "}
+                          Save
+                        </a>
+                      </div>
+                    )}
+                  </li>
                 ))}
+              </ul>
+            )}
+            {messages.length === 0 && (
+              <div className={styles.blankSlate}>
+                <div>
+                  <BlankSlate />
+                  <h2 className={styles.blankSlateTitle}>Welcome human!</h2>
+                  <p className={styles.blankSlateDescription}>
+                    Ask anything, I'm bored.
+                  </p>
+                  <div className={styles.blankSlateActions}>
+                    {prompts.map((prompt) => (
+                      <Button
+                        key={prompt.id}
+                        onPress={() => handlePrompt(prompt.value)}
+                      >
+                        {prompt.value}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
+          </main>
+          <footer className={styles.footer}>
+            <Button
+              aria-label="Save Chat"
+              onPress={handleSave}
+              isDisabled={isLoading || isSaveDisabled}
+            >
+              <Bookmark className={styles.buttonIcon} />
+            </Button>
+            <form className={styles.form} onSubmit={handleSubmit}>
+              <ComboBox
+                className={styles.comboBox}
+                name="message"
+                items={prompts}
+                label="Message"
+                placeholder="Ask anything about this page..."
+              />
+              <Button
+                aria-label="Send"
+                type="submit"
+                isIcon
+                isInlineSubmit
+                isDisabled={isLoading}
+              >
+                <PaperAirplane className={styles.buttonIcon} />
+              </Button>
+            </form>
+          </footer>
+        </article>
+      </TabPanel>
+      <TabPanel id="history">
+        {filter && (
+          <div className={styles.historyFilter}>
+            <p>Filter by: {filter}</p>
+            <a
+              href="#"
+              onClick={(e: React.MouseEvent) => {
+                e.preventDefault();
+                setFilter("");
+              }}
+            >
+              Clear
+            </a>
           </div>
         )}
-      </main>
-      <footer className={styles.footer}>
-        <form className={styles.form} onSubmit={handleSubmit}>
-        <Button
-            aria-label="Send"
-            type="submit"
-            isIcon
-            isInlineSubmit
-            isDisabled={isLoading}
-          >
-            <Memory className={styles.buttonIcon}/>
-          </Button>
-          <ComboBox
-            className={styles.comboBox}
-            name="message"
-            items={prompts}
-            label="Message"
-            placeholder="Ask anything about this page..."
-          />
-          <Button
-            aria-label="Send"
-            type="submit"
-            isIcon
-            isInlineSubmit
-            isDisabled={isLoading}
-          >
-            <PaperAirplane className={styles.buttonIcon} />
-          </Button>
-        </form>
-      </footer>
-    </article>
+        <article className={styles.history}>
+          <ul>
+            {chats
+              .filter(({ tags }) => {
+                if (!filter) return true;
+
+                return tags.includes(filter);
+              })
+              .map((chat) => (
+                <li className={styles.chatHistoryItem} key={chat.id}>
+                  <a
+                    href="#"
+                    onClick={(e: React.MouseEvent) => {
+                      e.preventDefault();
+                      handleHistoryItemClick(chat);
+                    }}
+                    title={`View chat about ${chat.title}`}
+                  >
+                    <h3>{chat.title}</h3>
+                    <p>
+                      {chat.website} | Accessed {chat.date}
+                    </p>
+                    <p>{chat.url}</p>
+                  </a>
+                </li>
+              ))}
+          </ul>
+        </article>
+      </TabPanel>
+      <TabPanel id="graph" className={styles.graph}>
+        <GraphCanvas
+          nodes={nodes}
+          draggable
+          edges={edges}
+          clusterAttribute="type"
+          constrainDragging={false}
+          onNodeClick={handleNodeClick}
+        />
+        <div className={styles.graphCanvas} />
+      </TabPanel>
+    </Tabs>
   );
 }

@@ -141,7 +141,17 @@ export const chats = [
     website: "BMC Biomedical Engineering",
     url: "https://bmcbiomedeng.biomedcentral.com/articles/10.1186/s42490-024-00080-2",
     date: "1 year ago",
-    messages: [],
+    messages: [{
+      id: crypto.randomUUID(),
+      author: "me" as const,
+      initials: "ME" as const,
+      body: "What is a brain-computer interface?",
+    }, {
+      id: crypto.randomUUID(),
+      author: "Falcon AI" as const,
+      initials: "AI" as const,
+      body: "A brain-computer interface (BCI) is a direct communication pathway between an enhanced or wired brain and an external device. BCIs are often directed at assisting, augmenting, or repairing human cognitive or sensory-motor functions.",
+    }],
     tags: ['brain-cpu'],
   },
 ];

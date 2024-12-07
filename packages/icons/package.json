@@ -17,7 +17,8 @@
     "./graph": "./src/Graph.tsx",
     "./paper-airplane": "./src/PaperAirplane.tsx",
     "./refresh": "./src/Refresh.tsx",
-    "./sparkle": "./src/Sparkle.tsx"
+    "./sparkle": "./src/Sparkle.tsx",
+    "./memory": "./src/Memory.tsx"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",

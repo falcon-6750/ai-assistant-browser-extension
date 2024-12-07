@@ -25,6 +25,7 @@ import type {
   SavedPrompt,
 } from ".";
 import { BlankSlate } from "./BlankSlate";
+import { Memory } from "../../icons/src/Memory";
 
 const chatHistoryNotImpleted =
   "Entries from Arxiv and Sage Journals cannot be displayed at this time. Please try another entry.";

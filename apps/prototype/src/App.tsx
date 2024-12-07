@@ -35,6 +35,7 @@ function App() {
             aiAgent={new FakeAIAgent("You are a helpful assistant.")}
             browser={fakeBrowser}
             changeSite={setSite}
+            currentSite={site}
             savedChats={chats}
             savedEdges={edges}
             savedNodes={nodes}

@@ -41,7 +41,7 @@ export const nodes = [
   },
   {
     id: "game-1",
-    label: "XBox (2)",
+    label: "XBox (3)",
     fill: "#c2410c",
     data: {
       type: "GAME",

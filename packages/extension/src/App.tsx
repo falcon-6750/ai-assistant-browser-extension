@@ -41,6 +41,7 @@ export function App({
   aiAgent: AIAgent;
   browser: Browser;
   changeSite: (site: { name: string; url: string }) => void;
+  currentSite: { name: string; url: string };
   savedChats: SavedChat[];
   savedEdges: SavedEdge[];
   savedNodes: SavedNode[];
@@ -48,7 +49,7 @@ export function App({
 }) {
   // Collections
   const [chats, setChats] = useState(savedChats);
-  const [nodes] = useState(savedNodes);
+  const [nodes, setNodes] = useState(savedNodes);
   const [edges] = useState(savedEdges);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [prompts, setPrompts] = useState(savedPrompts);
@@ -137,22 +138,27 @@ export function App({
     [browser, handlePrompt]
   );
 
-  const handleHistoryItemClick = useCallback((chat: SavedChat) => {
-    if (chat.website === "Arxiv") {
-      alert(chatHistoryNotImpleted);
-      return;
-    }
-    changeSite({
-      name: chat.title,
-      url: chat.url,
-    });
-    setMessages(chat.messages);
-    setActiveTab("chat");
-  }, [changeSite, setActiveTab, setMessages]);
+  const handleHistoryItemClick = useCallback(
+    (chat: SavedChat) => {
+      if (chat.website === "Arxiv") {
+        alert(chatHistoryNotImpleted);
+        return;
+      }
+      changeSite({
+        name: chat.title,
+        url: chat.url,
+      });
+      setMessages(chat.messages);
+      setActiveTab("chat");
+    },
+    [changeSite, setActiveTab, setMessages]
+  );
 
   const handleSave = useCallback(() => {
     if (isSaveDisabled) {
-      alert("This prototype was designed to save chats only once to give an idea of how it works. Reload the webpage to start a new chat if you'd like to try again.");
+      alert(
+        "This prototype was designed to save chats only once to give an idea of how it works. Reload the webpage to start a new chat if you'd like to try again."
+      );
       return;
     }
 
@@ -165,26 +171,48 @@ export function App({
         url: "https://en.wikipedia.org/wiki/Cognitive_load",
         date: "Today, 10:00 AM",
         messages,
-        tags: ["Cognitive Load"],
+        tags: ["cognitive load"],
       },
       ...chats,
-    ])
-    setMessages([])
-    setActiveTab("history")
-  }, [isSaveDisabled, setIsSaveDisabled, setChats, setMessages, setActiveTab, messages, chats]);
+    ]);
+    setNodes([
+      ...nodes.map((node) => {
+        if (node.label.includes("Cognitive Load")) {
+          return {
+            ...node,
+            label: `Cognitive Load (2)`,
+          };
+        }
 
-  const handleNodeClick = useCallback((node: InternalGraphNode) => {
-    const { label = ''} = node;
-    const tag = label.split("(")[0]?.trim().toLowerCase() ?? ''
-    if (tag === filter) {
-      setFilter(''); // Clear filter
-    } else {
-      setFilter(tag);
-    }
+        return node;
+      }),
+    ]);
+    setMessages([]);
     setActiveTab("history");
-  }, [filter, setFilter, setActiveTab]);
+  }, [
+    isSaveDisabled,
+    setIsSaveDisabled,
+    setChats,
+    setMessages,
+    setActiveTab,
+    messages,
+    nodes,
+    chats,
+  ]);
 
-  const disallowDynamicInteraction = isSaveDisabled || chats.some({ url }) => url);
+  const handleNodeClick = useCallback(
+    (node: InternalGraphNode) => {
+      const { label = "" } = node;
+      const tag = label.split("(")[0]?.trim().toLowerCase() ?? "";
+      if (tag === filter) {
+        setFilter(""); // Clear filter
+      } else {
+        setFilter(tag);
+      }
+      setActiveTab("history");
+    },
+    [filter, setFilter, setActiveTab]
+  );
 
   return (
     <Tabs selectedKey={activeTab} onSelectionChange={setActiveTab}>
@@ -258,7 +286,11 @@ export function App({
             )}
           </main>
           <footer className={styles.footer}>
-            <Button aria-label="Save Chat" onPress={handleSave} isDisabled={isSaveDisabled}>
+            <Button
+              aria-label="Save Chat"
+              onPress={handleSave}
+              isDisabled={isLoading || isSaveDisabled}
+            >
               <Bookmark className={styles.buttonIcon} />
             </Button>
             <form className={styles.form} onSubmit={handleSubmit}>
@@ -286,38 +318,43 @@ export function App({
         {filter && (
           <div className={styles.historyFilter}>
             <p>Filter by: {filter}</p>
-            <a href="#" onClick={(e: React.MouseEvent) => {
-              e.preventDefault();
-              setFilter('');
-            }}>
+            <a
+              href="#"
+              onClick={(e: React.MouseEvent) => {
+                e.preventDefault();
+                setFilter("");
+              }}
+            >
               Clear
             </a>
           </div>
         )}
         <article className={styles.history}>
           <ul>
-            {chats.filter(({ tags }) => {
-              if (!filter) return true;
+            {chats
+              .filter(({ tags }) => {
+                if (!filter) return true;
 
-              return tags.includes(filter);
-            }).map((chat) => (
-              <li className={styles.chatHistoryItem} key={chat.id}>
-                <a
-                  href="#"
-                  onClick={(e: React.MouseEvent) => {
-                    e.preventDefault();
-                    handleHistoryItemClick(chat);
-                  }}
-                  title={`View chat about ${chat.title}`}
-                >
-                  <h3>{chat.title}</h3>
-                  <p>
-                    {chat.website} | Accessed {chat.date}
-                  </p>
-                  <p>{chat.url}</p>
-                </a>
-              </li>
-            ))}
+                return tags.includes(filter);
+              })
+              .map((chat) => (
+                <li className={styles.chatHistoryItem} key={chat.id}>
+                  <a
+                    href="#"
+                    onClick={(e: React.MouseEvent) => {
+                      e.preventDefault();
+                      handleHistoryItemClick(chat);
+                    }}
+                    title={`View chat about ${chat.title}`}
+                  >
+                    <h3>{chat.title}</h3>
+                    <p>
+                      {chat.website} | Accessed {chat.date}
+                    </p>
+                    <p>{chat.url}</p>
+                  </a>
+                </li>
+              ))}
           </ul>
         </article>
       </TabPanel>
